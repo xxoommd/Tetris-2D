@@ -31,7 +31,9 @@ public abstract class Tetris : MonoBehaviour
 	// private
 	private int directionIndex;
 	private Vector3 nextPosition;
-	private bool moving;
+	private bool moving = false;
+	private Vector3 fallPosition;
+	private bool falling = false;
 
 	// Methods
 	protected virtual void Awake ()
@@ -51,8 +53,9 @@ public abstract class Tetris : MonoBehaviour
 			obj.transform.SetParent (transform);
 			obj.transform.localPosition = coordinates [directionIndex, i];
 			bricks [i] = obj;
-
 		}
+
+		nextPosition = transform.position;
 	}
 
 	protected virtual void Update ()
@@ -93,19 +96,66 @@ public abstract class Tetris : MonoBehaviour
 			if (h != 0) {
 				moving = true;
 				nextPosition = transform.localPosition;
-				Boundary by = boundary [directionIndex];
 				nextPosition.x += h;
-				nextPosition.x = nextPosition.x < by.xMin ? by.xMin : nextPosition.x;
-				nextPosition.x = nextPosition.x > by.xMax ? by.xMax : nextPosition.x;
+				nextPosition = RevisedPosition (nextPosition);
 			} else if (v != 0) {
 				moving = true;
 				nextPosition = transform.localPosition;
-				Boundary by = boundary [directionIndex];
 				nextPosition.y += v;
-				nextPosition.y = nextPosition.y < by.yMin ? by.yMin : nextPosition.y;
-				nextPosition.y = nextPosition.y > by.yMax ? by.yMax : nextPosition.y;
+				nextPosition = RevisedPosition (nextPosition);
 			}
 		}
+	}
+
+	protected void FixedUpdate ()
+	{
+		Fall ();
+	}
+
+	protected void Fall ()
+	{
+		if (falling) {
+			if (fallPosition == transform.localPosition) {
+				if (!CheckFall()) {
+					TransformToBricksAndDestroy ();
+					return;
+				}
+				falling = false;
+			} else {
+				float speed = GameController.instance.tetrisFallSpeed * Time.deltaTime;
+				transform.localPosition = Vector3.MoveTowards (transform.localPosition, fallPosition, speed);
+			}
+		} else {
+			fallPosition = transform.localPosition;
+			if (CheckFall ()) {
+				fallPosition.y -= 1;
+				falling = true;
+			} else {
+				TransformToBricksAndDestroy ();
+				return;
+			}
+		}
+	}
+
+	protected bool CheckFall ()
+	{
+		if (transform.localPosition.y < 1f) {
+			return false;
+		}
+
+		return true;
+	}
+
+	protected void TransformToBricksAndDestroy ()
+	{
+		foreach (GameObject brick in bricks) {
+			brick.transform.SetParent(GameController.instance.board.transform);
+			int x = (int)brick.transform.position.x;
+			int y = (int)brick.transform.position.y;
+			GameController.instance.boardScript.brickBoxes[x, y] = brick;
+		}
+
+//		Destroy (gameObject);
 	}
 
 	protected void Turn ()
@@ -116,6 +166,20 @@ public abstract class Tetris : MonoBehaviour
 			GameObject brick = bricks [i];
 			brick.transform.localPosition = coordinates [directionIndex, i];
 		}
+
+		transform.position = RevisedPosition (transform.position);
+	}
+
+	private Vector3 RevisedPosition (Vector3 position)
+	{
+		Vector3 newPosition = position;
+		Boundary by = boundary [directionIndex];
+		newPosition.x = newPosition.x < by.xMin ? by.xMin : newPosition.x;
+		newPosition.x = newPosition.x > by.xMax ? by.xMax : newPosition.x;
+		newPosition.y = newPosition.y < by.yMin ? by.yMin : newPosition.y;
+		newPosition.y = newPosition.y > by.yMax ? by.yMax : newPosition.y;
+
+		return newPosition;
 	}
 
 	protected abstract void InitialAllCoordinates ();

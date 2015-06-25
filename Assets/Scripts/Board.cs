@@ -3,10 +3,10 @@ using System.Collections;
 
 public class Board : MonoBehaviour
 {
-	public GameObject brick;
+	[HideInInspector]
+	public GameObject[,] brickBoxes;
 
-	void Start ()
-	{
-
+	void Awake () {
+		brickBoxes = new GameObject[20,30];
 	}
 }

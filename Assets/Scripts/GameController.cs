@@ -4,12 +4,19 @@ using Random = UnityEngine.Random;
 
 public class GameController : MonoBehaviour
 {
-
+	//
 	public static GameController instance = null;
 	public GameObject[] tetrisTemplates;
-	public Transform board;
+	public GameObject board;
 	public Transform spawnSpot;
 	public float tetrisMoveSpeed = 20f;
+	public float tetrisFallSpeed = 10f;
+
+	//
+	[HideInInspector]
+	public Board boardScript;
+
+	//
 	private GameObject currentTetris = null;
 
 	void Awake ()
@@ -22,11 +29,15 @@ public class GameController : MonoBehaviour
 		DontDestroyOnLoad (gameObject);
 	}
 
+	void Start () {
+		boardScript = board.GetComponent<Board> ();
+	}
+
 	void Update ()
 	{
 		if (currentTetris == null) {
-			currentTetris = Instantiate (tetrisTemplates[Random.Range (0, tetrisTemplates.Length)]) as GameObject;
-			currentTetris.transform.SetParent (board);
+			currentTetris = Instantiate (tetrisTemplates [Random.Range (0, tetrisTemplates.Length)]) as GameObject;
+			currentTetris.transform.SetParent (board.transform);
 			currentTetris.transform.position = spawnSpot.position;
 		}
 	}
