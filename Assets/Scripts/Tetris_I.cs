@@ -25,18 +25,18 @@ public class Tetris_I : Tetris
 		};
 
 		boundary = new Boundary[] {
-			new Boundary (0, 0, 16, 29),
-			new Boundary (0, 0, 19, 26)
+			new Boundary (0, 16, 0, 29),
+			new Boundary (0, 19, 0, 26)
 		};
 	}
 
-	protected override void Update ()
-	{
-		Debug.Log ("Bricks World Position: ");
-		for (int i = 0; i < 4; i++) {
-			GameObject brick = bricks [i];
-			Debug.Log (brick.transform.position);
-		}
-		base.Update ();
-	}
+//	protected override void Update ()
+//	{
+//		Debug.Log ("Bricks World Position: ");
+//		for (int i = 0; i < 4; i++) {
+//			GameObject brick = bricks [i];
+//			Debug.Log (brick.transform.position);
+//		}
+//		base.Update ();
+//	}
 }
