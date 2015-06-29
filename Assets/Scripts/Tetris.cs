@@ -63,7 +63,7 @@ public abstract class Tetris : MonoBehaviour
 
 	protected virtual void Update ()
 	{
-		if (Input.GetButtonUp ("Fire1") && CanTurn ()) {
+		if (Input.GetButtonUp ("Fire1") && CanTurn () && !moving) {
 			Turn ();
 		}
 
