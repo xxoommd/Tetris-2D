@@ -35,6 +35,7 @@ public abstract class Tetris : MonoBehaviour
 	private bool falling = false;
 	private float xDir = 0;
 	private float yDir = 0;
+	private bool destroying = false;
 
 	// Methods
 	protected virtual void Awake ()
@@ -63,22 +64,22 @@ public abstract class Tetris : MonoBehaviour
 
 	protected virtual void Update ()
 	{
-		if (Input.GetButtonUp ("Fire1") && CanTurn () && !moving) {
-			Turn ();
-		}
-
-		int h = (int)Input.GetAxisRaw ("Horizontal");
-		if (!moving && CanMove (h)) {
-			if (h != 0) {
-				Move (h);
-			}
-		}
-
-		if (!falling) {
+		if (!falling && !moving && !destroying) {
 			if (CanFall ()) {
 				Fall ();
 			} else {
 				TransformToBricksAndDestroy ();
+			}
+		}
+
+		if ((Input.GetButtonUp ("Fire1") || Input.GetButtonUp("Jump")) && CanTurn () && !moving && !destroying) {
+			Turn ();
+		}
+
+		int h = (int)Input.GetAxisRaw ("Horizontal");
+		if (!moving && CanMove (h) && !destroying) {
+			if (h != 0) {
+				Move (h);
 			}
 		}
 	}
@@ -217,6 +218,7 @@ public abstract class Tetris : MonoBehaviour
 	protected void TransformToBricksAndDestroy ()
 	{
 		// Revise position
+		destroying = true;
 		Vector3 newPosition = new Vector3 (xDir, yDir, 0f);
 		transform.localPosition = newPosition;
 
