@@ -10,33 +10,19 @@ public class Tetris_I : Tetris
 
 		coordinates = new Vector2[2, 4] {
 			{
-				new Vector2 (0.5f, 0.5f),
-				new Vector2 (1.5f, 0.5f),
-				new Vector2 (2.5f, 0.5f),
-				new Vector2 (3.5f, 0.5f),
+				new Vector2 (0, 0),
+				new Vector2 (1, 0),
+				new Vector2 (2, 0),
+				new Vector2 (3, 0),
 			},
 			
 			{
-				new Vector2 (0.5f, 0.5f),
-				new Vector2 (0.5f, 1.5f),
-				new Vector2 (0.5f, 2.5f),
-				new Vector2 (0.5f, 3.5f),
+				new Vector2 (0, 0),
+				new Vector2 (0, 1),
+				new Vector2 (0, 2),
+				new Vector2 (0, 3),
 			},
-		};
-
-		boundary = new Boundary[] {
-			new Boundary (0, 16, 0, 29),
-			new Boundary (0, 19, 0, 26)
 		};
 	}
 
-//	protected override void Update ()
-//	{
-//		Debug.Log ("Bricks World Position: ");
-//		for (int i = 0; i < 4; i++) {
-//			GameObject brick = bricks [i];
-//			Debug.Log (brick.transform.position);
-//		}
-//		base.Update ();
-//	}
 }

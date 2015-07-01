@@ -2,47 +2,28 @@
 using System.Collections;
 using Random = UnityEngine.Random;
 
-public class Boundary
-{
-	public int xMin, xMax, yMin, yMax;
-
-	public Boundary (int xmin, int xmax, int ymin, int ymax)
-	{
-		xMin = xmin;
-		xMax = xmax;
-		yMin = ymin;
-		yMax = ymax;
-	}
-}
-
 public abstract class Tetris : MonoBehaviour
 {
 
-	// Public
+	// Public variables showing in inspector
 	public GameObject[] brickTemplates;
 
-	// Protected
+	// Protected variables
 	protected GameObject[] bricks;
 	protected Vector2[,] coordinates;
-	protected Boundary[] boundary;
 	protected int directionSize;
+	protected int directionIndex;
 
-
-	// private
-	private int directionIndex;
+	// Private variables
+	private bool turning = false;
 	private bool moving = false;
-	private Vector3 fallPosition;
 	private bool falling = false;
-	private float xDir = 0;
-	private float yDir = 0;
-	private bool destroying = false;
+	private Board board;
 
-	// Methods
+	// Inheritated Methods from MonoBehaviour
 	protected virtual void Awake ()
 	{
 		InitialAllCoordinates ();
-
-		moving = false;
 
 		GameObject brick = brickTemplates [Random.Range (0, brickTemplates.Length)];
 
@@ -59,191 +40,134 @@ public abstract class Tetris : MonoBehaviour
 
 	protected virtual void Start ()
 	{
-		xDir = transform.localPosition.x;
+		board = GameController.instance.boardScript;
 	}
 
 	protected virtual void Update ()
 	{
-		if (!falling && !moving && !destroying) {
-			if (CanFall ()) {
-				Fall ();
-			} else {
-				TransformToBricksAndDestroy ();
-			}
+		// Define key functions:
+		//   'Up' -> Turn
+		if (Input.GetButtonUp ("Fire1")/*Input.GetKeyUp (KeyCode.UpArrow)*/ && !turning) {
+			StartCoroutine (Turn ());
 		}
 
-		if ((Input.GetButtonUp ("Fire1") || Input.GetButtonUp("Jump")) && CanTurn () && !moving && !destroying) {
-			Turn ();
+		//   'Down' -> Fall one unit immediately
+		int v = (int)Input.GetAxisRaw ("Vertical");
+		if (v != 0 && CanMove (0, v)) {
+			StartCoroutine (Move (0, v));
 		}
-
+		//   'Left' or 'Right' -> Horizontal movement by one unit
 		int h = (int)Input.GetAxisRaw ("Horizontal");
-		if (!moving && CanMove (h) && !destroying) {
-			if (h != 0) {
-				Move (h);
-			}
+		if (h != 0 && CanMove (h, 0)) {
+			StartCoroutine (Move (h, 0));
 		}
+
+		//   'Space' -> Fall down immediately
+
 	}
 
-	protected void FixedUpdate ()
+	// Self-defined methods
+	IEnumerator Turn ()
 	{
-		Vector3 moveTranslate = Vector3.zero;
-		if (moving) {
-			if (Mathf.Abs (transform.localPosition.x - xDir) > 0.01f) {
-				moveTranslate.x = (xDir - transform.localPosition.x) * GameController.instance.tetrisMoveSpeed * Time.deltaTime;
-			} else {
-				Vector3 newPosition = transform.localPosition;
-				newPosition.x = xDir;
-				transform.localPosition = newPosition;
-				moving = false;
-			}
-		}
+		turning = true;
+		directionIndex = (directionIndex + 1) % directionSize;
 
-		if (falling) {
-			if (Mathf.Abs (transform.localPosition.y - yDir) > 0.01f) {
-				moveTranslate.y = (yDir - transform.localPosition.y) * GameController.instance.tetrisFallSpeed * Time.deltaTime;
-			} else {
-				Vector3 newPosition = transform.localPosition;
-				newPosition.y = yDir;
-				transform.localPosition = newPosition;
-				falling = false;
-			}
-		}
-
-		if (moveTranslate != Vector3.zero) {
-			transform.Translate (moveTranslate);
-		}
-	}
-
-	protected void Turn ()
-	{
-		directionIndex = NextDirectionIndex ();
-		
+		Vector3 revisedPos = Vector3.zero;
 		for (int i = 0; i < 4; i++) {
 			GameObject brick = bricks [i];
 			brick.transform.localPosition = coordinates [directionIndex, i];
-		}
 
-		Boundary by = boundary [directionIndex];
-		transform.position = RevisedPosition (transform.position, by);
-	}
-
-	protected bool CanTurn ()
-	{
-		Boundary nextBound = boundary [NextDirectionIndex ()];
-
-		GameObject tempObj = new GameObject ();
-		tempObj.transform.SetParent (gameObject.transform.parent);
-		tempObj.transform.position = RevisedPosition (transform.position, nextBound);
-
-		Vector2[] brickPositions = new Vector2[4];
-
-		bool isOK = true;
-		for (int i = 0; i < 4; i++) {
-			brickPositions[i] = tempObj.transform.TransformPoint(coordinates[NextDirectionIndex(), i]);
-
-			int x = (int)brickPositions[i].x;
-			int y = (int)brickPositions[i].y;
-			if (GameController.instance.boardScript.brickBoxes[x, y] != null) {
-				isOK = false;
+			if (brick.transform.position.x < 0) {
+				revisedPos.x = 0 - brick.transform.position.x;
+			} else if (brick.transform.position.x > GameController.instance.boundary.x) {
+				revisedPos.x = GameController.instance.boundary.x - brick.transform.position.x;
 			}
 		}
 
-		Destroy(tempObj);
-		if (isOK) {
-			return true;
-		} else {
-			// TODO
-			return false;
+		if (revisedPos != Vector3.zero) {
+			transform.position += revisedPos;
 		}
+
+		yield return new WaitForSeconds (0.1f);
+		turning = false;
 	}
 
-	private int NextDirectionIndex ()
+	bool CanMove (int h, int v)
 	{
-		return (directionIndex + 1) % directionSize;
-	}
-
-	protected void Move (int h)
-	{
-		moving = true;
-		xDir = transform.localPosition.x + h;
-		Boundary bound = boundary [directionIndex];
-		xDir = xDir < bound.xMin ? bound.xMin : xDir;
-		xDir = xDir > bound.xMax ? bound.xMax : xDir;
-	}
-
-	protected bool CanMove (int h)
-	{
-		foreach (GameObject brick in bricks) {
-			Vector3 pos = brick.transform.position;
-			int x = (int)pos.x + h;
-			x = x < 0 ? 0 : x;
-			x = x > 19 ? 19 : x;
-			int y = (int)pos.y;
-			if (GameController.instance.boardScript.brickBoxes [x, y] != null) {
+		if (h != 0) {
+			if (moving) {
 				return false;
+			} else {
+				foreach (GameObject brick in bricks) {
+					int nextX = (int)brick.transform.position.x + h;
+					int nextY = (int)brick.transform.position.y;
+					if (nextX < 0 || nextX > (int)GameController.instance.boundary.x || board.brickBoxes [nextX, nextY] != null) {
+						return false;
+					}
+				}
+
+				return true;
 			}
 		}
 
-		return true;
-	}
-
-	protected void Fall ()
-	{
-		falling = true;
-		yDir = transform.localPosition.y - 1;
-		Boundary bound = boundary [directionIndex];
-		yDir = yDir < bound.yMin ? bound.yMin : yDir;
-		yDir = yDir > bound.yMax ? bound.yMax : yDir;
-	}
-
-	protected bool CanFall ()
-	{
-		if (transform.localPosition.y < float.Epsilon) {
-			return false;
-		}
-
-		foreach (GameObject brick in bricks) {
-			Vector3 pos = brick.transform.position;
-			int x = (int)pos.x;
-			int y = (int)pos.y - 1;
-			y = y < 0 ? 0 : y;
-			if (GameController.instance.boardScript.brickBoxes [x, y] != null) {
+		if (v != 0) {
+			if (falling) {
 				return false;
+			} else {
+				foreach (GameObject brick in bricks) {
+					int nextX = (int)brick.transform.position.x;
+					int nextY = (int)brick.transform.position.y + v;
+					if (nextY < 0 || nextY > (int)GameController.instance.boundary.y || board.brickBoxes [nextX, nextY] != null) {
+						return false;
+					}
+				}
+
+				return true;
 			}
 		}
 
-		return true;
+		return false;
 	}
 
-	protected void TransformToBricksAndDestroy ()
+	IEnumerator Move (int h, int v)
 	{
-		// Revise position
-		destroying = true;
-		Vector3 newPosition = new Vector3 (xDir, yDir, 0f);
-		transform.localPosition = newPosition;
-
-		foreach (GameObject brick in bricks) {
-			brick.transform.SetParent (GameController.instance.board.transform);
-			int x = (int)brick.transform.position.x;
-			int y = (int)brick.transform.position.y;
-			GameController.instance.boardScript.brickBoxes [x, y] = brick;
+		if (h != 0) {
+			moving = true;
 		}
 
-		Destroy (gameObject);
-		GameController.instance.boardScript.CheckClear ();
-	}
+		if (v != 0) {
+			falling = true;
+		}
 
-	private Vector3 RevisedPosition (Vector3 position, Boundary by)
-	{
-		Vector3 newPosition = position;
+		Vector2 pos = transform.position;
+		pos += new Vector2 (h, v);
+		transform.position = pos;
 
-		newPosition.x = newPosition.x < by.xMin ? by.xMin : newPosition.x;
-		newPosition.x = newPosition.x > by.xMax ? by.xMax : newPosition.x;
-		newPosition.y = newPosition.y < by.yMin ? by.yMin : newPosition.y;
-		newPosition.y = newPosition.y > by.yMax ? by.yMax : newPosition.y;
+		yield return new WaitForSeconds (0.05f);
 
-		return newPosition;
+		if (h != 0) {
+			moving = false;
+		}
+		
+		if (v != 0) {
+			falling = false;
+		}
 	}
 
 	protected abstract void InitialAllCoordinates ();
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

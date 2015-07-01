@@ -9,12 +9,14 @@ public class GameController : MonoBehaviour
 	public GameObject[] tetrisTemplates;
 	public GameObject board;
 	public Transform spawnSpot;
-	public float tetrisMoveSpeed = 20f;
-	public float tetrisFallSpeed = 10f;
+	public float fallingUnitTime = 0.1f;
+	public float movingUnitTime = 0.1f;
+	public Vector2 boundary;
 
 	//
 	[HideInInspector]
-	public Board boardScript;
+	public Board
+		boardScript;
 
 	//
 	private GameObject currentTetris = null;
@@ -29,7 +31,8 @@ public class GameController : MonoBehaviour
 		DontDestroyOnLoad (gameObject);
 	}
 
-	void Start () {
+	void Start ()
+	{
 		boardScript = board.GetComponent<Board> ();
 	}
 
