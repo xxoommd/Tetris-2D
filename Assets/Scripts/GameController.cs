@@ -7,16 +7,11 @@ public class GameController : MonoBehaviour
 	//
 	public static GameController instance = null;
 	public GameObject[] tetrisTemplates;
-	public GameObject board;
+	public Board board;
 	public Transform spawnSpot;
 	public float fallingUnitTime = 0.1f;
 	public float movingUnitTime = 0.1f;
 	public Vector2 boundary;
-
-	//
-	[HideInInspector]
-	public Board
-		boardScript;
 
 	//
 	private GameObject currentTetris = null;
@@ -33,7 +28,7 @@ public class GameController : MonoBehaviour
 
 	void Start ()
 	{
-		boardScript = board.GetComponent<Board> ();
+		board = GameObject.Find ("Board").GetComponent<Board> ();
 	}
 
 	void Update ()

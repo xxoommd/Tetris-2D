@@ -40,7 +40,7 @@ public abstract class Tetris : MonoBehaviour
 
 	protected virtual void Start ()
 	{
-		board = GameController.instance.boardScript;
+		board = GameController.instance.board;
 	}
 
 	protected virtual void Update ()
