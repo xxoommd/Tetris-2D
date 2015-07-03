@@ -18,6 +18,8 @@ public abstract class Tetris : MonoBehaviour
 	private bool turning = false;
 	private bool moving = false;
 	private bool falling = false;
+	private bool upMoveDisabled = false;
+	private bool reachBottom = false;
 	private Board board;
 
 	// Inheritated Methods from MonoBehaviour
@@ -41,29 +43,44 @@ public abstract class Tetris : MonoBehaviour
 	protected virtual void Start ()
 	{
 		board = GameController.instance.board;
+		StartCoroutine (AutoFall (0.5f));
 	}
 
 	protected virtual void Update ()
 	{
+		if (reachBottom) {
+			StartCoroutine (TransferToBricksAndDestroy ());
+			return;
+		}
+		// Define controllers: PC & Mac & Web & HTML5
+#if UNITY_EDITOR || UNITY_STANDALONE || UNITY_WEBPLAYER || UNITY_WEBGL
 		// Define key functions:
-		//   'Up' -> Turn
-		if (Input.GetButtonUp ("Fire1")/*Input.GetKeyUp (KeyCode.UpArrow)*/ && !turning) {
+
+		/* 'Arrow Up' -> Turn */
+		if (Input.GetButtonUp ("Fire1") || Input.GetKeyUp (KeyCode.UpArrow) && !turning) {
 			StartCoroutine (Turn ());
+		}
+
+		//   'Arrow Left' or 'Right' -> Horizontal movement by one unit
+		int h = (int)Input.GetAxisRaw ("Horizontal");
+		if (h != 0 && CanHorizontalMove (h)) {
+			StartCoroutine (HorizontalMove (h));
 		}
 
 		//   'Down' -> Fall one unit immediately
 		int v = (int)Input.GetAxisRaw ("Vertical");
-		if (v != 0 && CanMove (0, v)) {
-			StartCoroutine (Move (0, v));
-		}
-		//   'Left' or 'Right' -> Horizontal movement by one unit
-		int h = (int)Input.GetAxisRaw ("Horizontal");
-		if (h != 0 && CanMove (h, 0)) {
-			StartCoroutine (Move (h, 0));
+		if (v == -1 && CanVerticalMove (-1)) {
+			StartCoroutine (VerticalMove(-1));
 		}
 
 		//   'Space' -> Fall down immediately
+		if (Input.GetKeyUp(KeyCode.Space)) {
+			FallDownToBottom();
+		}
 
+#elif UNITY_IOS
+		// TODO: Touch Controllers
+#endif
 	}
 
 	// Self-defined methods
@@ -92,7 +109,7 @@ public abstract class Tetris : MonoBehaviour
 		turning = false;
 	}
 
-	bool CanMove (int h, int v)
+	bool CanHorizontalMove (int h)
 	{
 		if (h != 0) {
 			if (moving) {
@@ -110,6 +127,15 @@ public abstract class Tetris : MonoBehaviour
 			}
 		}
 
+		return false;
+	}
+
+	bool CanVerticalMove (int v)
+	{
+		if (v > 0 && upMoveDisabled) {
+			return false;
+		}
+
 		if (v != 0) {
 			if (falling) {
 				return false;
@@ -118,6 +144,7 @@ public abstract class Tetris : MonoBehaviour
 					int nextX = (int)brick.transform.position.x;
 					int nextY = (int)brick.transform.position.y + v;
 					if (nextY < 0 || nextY > (int)GameController.instance.boundary.y || board.brickBoxes [nextX, nextY] != null) {
+						reachBottom = true;
 						return false;
 					}
 				}
@@ -129,29 +156,76 @@ public abstract class Tetris : MonoBehaviour
 		return false;
 	}
 
-	IEnumerator Move (int h, int v)
+	bool CanAutoFall ()
 	{
-		if (h != 0) {
-			moving = true;
+		return CanVerticalMove (-1);
+	}
+
+	IEnumerator AutoFall (float fallingSpeed = 0.05f)
+	{
+		while (CanAutoFall()) {
+			if (reachBottom || !autoFallingEnabled) {
+				break;
+			}
+
+			Vector2 pos = transform.position;
+			pos += new Vector2 (0, -1);
+			transform.position = pos;
+			
+			yield return new WaitForSeconds (fallingSpeed);
+		}
+	}
+
+	void FallDownToBottom ()
+	{
+		int fallDepth = 0;
+
+		while (CanVerticalMove(fallDepth - 1)) {
+			fallDepth -= 1;
 		}
 
-		if (v != 0) {
-			falling = true;
-		}
+		StartCoroutine (VerticalMove (fallDepth));
+	}
+
+	IEnumerator HorizontalMove (int h, float moveDelay = 0.05f)
+	{
+		moving = true;
 
 		Vector2 pos = transform.position;
-		pos += new Vector2 (h, v);
+		pos += new Vector2 (h, 0);
 		transform.position = pos;
 
-		yield return new WaitForSeconds (0.05f);
+		yield return new WaitForSeconds (moveDelay);
 
-		if (h != 0) {
-			moving = false;
+		moving = false;
+	}
+
+	IEnumerator VerticalMove (int v, float moveDelay = 0.05f)
+	{
+		falling = true;
+
+		Vector2 pos = transform.position;
+		pos += new Vector2 (0, v);
+		transform.position = pos;
+
+		yield return new WaitForSeconds (moveDelay);
+
+		falling = false;
+	}
+
+	IEnumerator TransferToBricksAndDestroy ()
+	{
+		foreach (GameObject brick in bricks) {
+			int x = (int)brick.transform.position.x;
+			int y = (int)brick.transform.position.y;
+
+			board.brickBoxes [x, y] = brick;
+			brick.transform.SetParent (board.transform);
 		}
-		
-		if (v != 0) {
-			falling = false;
-		}
+
+		Destroy (gameObject);
+		board.CheckClear ();
+		yield return null;
 	}
 
 	protected abstract void InitialAllCoordinates ();
