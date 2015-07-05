@@ -10,27 +10,27 @@ public class Tetris_T : Tetris {
 		coordinates = new Vector2[4,4] {
 			{
 				new Vector2 (0, 0),
+				new Vector2 (0, 1f),
 				new Vector2 (1f, 0),
 				new Vector2 (-1f, 0),
-				new Vector2 (0, 1f),
 			},
 			{
+				new Vector2 (0, 0),
 				new Vector2 (0, 1f),
-				new Vector2 (0, 0),
-				new Vector2 (0, -1f),
-				new Vector2 (1f, 0),
-			},
-			{
-				new Vector2 (-1f, 0),
-				new Vector2 (0, 0),
 				new Vector2 (1f, 0),
 				new Vector2 (0, -1f),
 			},
 			{
-				new Vector2 (0, 1f),
 				new Vector2 (0, 0),
-				new Vector2 (0, -1),
-				new Vector2 (-1, 0),
+				new Vector2 (0, -1f),
+				new Vector2 (1f, 0),
+				new Vector2 (-1f, 0),
+			},
+			{
+				new Vector2 (0, 0),
+				new Vector2 (0, 1f),
+				new Vector2 (-1f, 0),
+				new Vector2 (0, -1f),
 			},
 		};
 	}

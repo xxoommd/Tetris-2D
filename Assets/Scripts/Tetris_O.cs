@@ -10,10 +10,10 @@ public class Tetris_O : Tetris
 
 		coordinates = new Vector2[1, 4] {
 			{
-				new Vector2 (0.5f, 0.5f),
-				new Vector2 (0.5f, -0.5f),
-				new Vector2 (-0.5f, 0.5f),
-				new Vector2 (-0.5f, -0.5f),
+				new Vector2 (0, 0),
+				new Vector2 (0, 1),
+				new Vector2 (1, 0),
+				new Vector2 (1, 1),
 			}
 		};
 	}

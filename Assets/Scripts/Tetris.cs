@@ -17,8 +17,9 @@ public abstract class Tetris : MonoBehaviour
 	// Private variables
 	private bool turning = false;
 	private bool moving = false;
-	private bool falling = false;
 	private bool upMoveDisabled = false;
+	private bool autoFallDisabled = false;
+	private bool movingDown = false;
 	private bool reachBottom = false;
 	private Board board;
 
@@ -52,13 +53,18 @@ public abstract class Tetris : MonoBehaviour
 			StartCoroutine (TransferToBricksAndDestroy ());
 			return;
 		}
-		// Define controllers: PC & Mac & Web & HTML5
-#if UNITY_EDITOR || UNITY_STANDALONE || UNITY_WEBPLAYER || UNITY_WEBGL
-		// Define key functions:
 
-		/* 'Arrow Up' -> Turn */
-		if (Input.GetButtonUp ("Fire1") || Input.GetKeyUp (KeyCode.UpArrow) && !turning) {
-			StartCoroutine (Turn ());
+
+#if UNITY_EDITOR || UNITY_STANDALONE || UNITY_WEBPLAYER || UNITY_WEBGL
+		// Define controllers: Keyboard
+
+		//   'Fire1' or 'Arrow Up' -> Turn
+		int revisedX = 0;
+		if (Input.GetButtonUp ("Fire1") || Input.GetKeyUp (KeyCode.UpArrow)) {
+			if (CanTurn (ref revisedX)) {
+				Debug.Log("out: Revised X: " + revisedX.ToString());
+				StartCoroutine (Turn (revisedX));
+			}
 		}
 
 		//   'Arrow Left' or 'Right' -> Horizontal movement by one unit
@@ -69,8 +75,8 @@ public abstract class Tetris : MonoBehaviour
 
 		//   'Down' -> Fall one unit immediately
 		int v = (int)Input.GetAxisRaw ("Vertical");
-		if (v == -1 && CanVerticalMove (-1)) {
-			StartCoroutine (VerticalMove(-1));
+		if (v == -1 && CanMoveDownByOneStep ()) {
+			StartCoroutine (MoveDownOneStep ());
 		}
 
 		//   'Space' -> Fall down immediately
@@ -84,25 +90,79 @@ public abstract class Tetris : MonoBehaviour
 	}
 
 	// Self-defined methods
-	IEnumerator Turn ()
+	void Move (int h, int v)
+	{
+		Vector2 pos = transform.position;
+		pos += new Vector2 (h, v);
+		transform.position = pos;
+	}
+
+	bool CanTurn (ref int revisedX)
+	{
+		if (turning) {
+			return false;
+		}
+
+		GameObject tetrisClone = new GameObject ();
+		tetrisClone.transform.SetParent (transform.parent);
+		tetrisClone.transform.localPosition = transform.localPosition;
+		GameObject[] bricksClone = new GameObject[4];
+
+		int nextDirectionIndex = (directionIndex + 1) % directionSize;
+
+		for (int i = 0; i < 4; i++) {
+			bricksClone [i] = new GameObject ();
+			bricksClone [i].transform.SetParent (tetrisClone.transform);
+			bricksClone [i].transform.localPosition = coordinates [nextDirectionIndex, i];
+		}
+
+		// Calculating Revised X;
+		for (int absX = 0; absX < 20; absX++) {
+			for (int directionFactor = -1; directionFactor <= 1; directionFactor += 2) {
+				int potentialX = (int)(transform.position.x) + absX * directionFactor;
+
+				Vector2 pos = transform.position;
+				pos.x = potentialX;
+				tetrisClone.transform.position = pos;
+
+				bool isOK = true;
+				foreach (GameObject brick in bricksClone) {
+					int x = (int)brick.transform.position.x;
+					int y = (int)brick.transform.position.y;
+
+					Debug.Log (string.Format ("brick's new position: ({0}, {1})", x, y));
+	
+					if (x < 0 || x > 19 || board.brickBoxes [x, y] != null) {
+						isOK = false;
+						break;
+					}
+				}
+
+				if (isOK) {
+					revisedX = potentialX - (int)transform.position.x;
+					Debug.Log ("in: Revised X: " + revisedX.ToString ());
+					Destroy (tetrisClone);
+					return true;
+				}
+			}
+		}
+
+		Destroy (tetrisClone);
+		return false;
+	}
+
+	IEnumerator Turn (int revisedX = 0)
 	{
 		turning = true;
 		directionIndex = (directionIndex + 1) % directionSize;
 
-		Vector3 revisedPos = Vector3.zero;
 		for (int i = 0; i < 4; i++) {
 			GameObject brick = bricks [i];
 			brick.transform.localPosition = coordinates [directionIndex, i];
-
-			if (brick.transform.position.x < 0) {
-				revisedPos.x = 0 - brick.transform.position.x;
-			} else if (brick.transform.position.x > GameController.instance.boundary.x) {
-				revisedPos.x = GameController.instance.boundary.x - brick.transform.position.x;
-			}
 		}
 
-		if (revisedPos != Vector3.zero) {
-			transform.position += revisedPos;
+		if (revisedX != 0) {
+			Move (revisedX, 0);
 		}
 
 		yield return new WaitForSeconds (0.1f);
@@ -137,20 +197,18 @@ public abstract class Tetris : MonoBehaviour
 		}
 
 		if (v != 0) {
-			if (falling) {
-				return false;
-			} else {
-				foreach (GameObject brick in bricks) {
-					int nextX = (int)brick.transform.position.x;
-					int nextY = (int)brick.transform.position.y + v;
-					if (nextY < 0 || nextY > (int)GameController.instance.boundary.y || board.brickBoxes [nextX, nextY] != null) {
-						reachBottom = true;
-						return false;
-					}
-				}
 
-				return true;
+			foreach (GameObject brick in bricks) {
+				int nextX = (int)brick.transform.position.x;
+				int nextY = (int)brick.transform.position.y + v;
+				if (nextY < 0 || nextY > (int)GameController.instance.boundary.y || board.brickBoxes [nextX, nextY] != null) {
+					reachBottom = true;
+					return false;
+				}
 			}
+
+			return true;
+
 		}
 
 		return false;
@@ -164,13 +222,15 @@ public abstract class Tetris : MonoBehaviour
 	IEnumerator AutoFall (float fallingSpeed = 0.05f)
 	{
 		while (CanAutoFall()) {
-			if (reachBottom || !autoFallingEnabled) {
+			if (reachBottom) {
 				break;
 			}
 
-			Vector2 pos = transform.position;
-			pos += new Vector2 (0, -1);
-			transform.position = pos;
+			if (autoFallDisabled) {
+				yield return new WaitForSeconds (0.1f);
+			}
+
+			Move (0, -1);
 			
 			yield return new WaitForSeconds (fallingSpeed);
 		}
@@ -191,9 +251,7 @@ public abstract class Tetris : MonoBehaviour
 	{
 		moving = true;
 
-		Vector2 pos = transform.position;
-		pos += new Vector2 (h, 0);
-		transform.position = pos;
+		Move (h, 0);
 
 		yield return new WaitForSeconds (moveDelay);
 
@@ -202,19 +260,32 @@ public abstract class Tetris : MonoBehaviour
 
 	IEnumerator VerticalMove (int v, float moveDelay = 0.05f)
 	{
-		falling = true;
-
-		Vector2 pos = transform.position;
-		pos += new Vector2 (0, v);
-		transform.position = pos;
+		Move (0, v);
 
 		yield return new WaitForSeconds (moveDelay);
+	}
 
-		falling = false;
+	bool CanMoveDownByOneStep ()
+	{
+		return !movingDown && CanVerticalMove (-1);
+	}
+
+	IEnumerator MoveDownOneStep ()
+	{
+		autoFallDisabled = true;
+		movingDown = true;
+
+		Move (0, -1);
+
+		yield return new WaitForSeconds (0.05f);
+		autoFallDisabled = false;
+		movingDown = false;
 	}
 
 	IEnumerator TransferToBricksAndDestroy ()
 	{
+		yield return new WaitForSeconds (0.15f);
+
 		foreach (GameObject brick in bricks) {
 			int x = (int)brick.transform.position.x;
 			int y = (int)brick.transform.position.y;
@@ -225,7 +296,6 @@ public abstract class Tetris : MonoBehaviour
 
 		Destroy (gameObject);
 		board.CheckClear ();
-		yield return null;
 	}
 
 	protected abstract void InitialAllCoordinates ();
