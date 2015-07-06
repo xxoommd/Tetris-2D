@@ -11,11 +11,8 @@ public class GameController : MonoBehaviour
 	[HideInInspector]
 	public Board board;
 	public float fallingUnitTime = 0.1f;
-	public float movingUnitTime = 0.1f;
 	public Vector2 boundary;
 	public Text gameOverText;
-
-
 	//
 	private GameObject currentTetris = null;
 	private bool isGameOver = false;

@@ -24,6 +24,10 @@ public abstract class Tetris : MonoBehaviour
 	private bool reachBottom = false;
 	private Board board;
 
+	// Long press makes move faster
+	private bool pressedEnabled = false;
+	private float pressedTime = 0f;
+
 	// Inheritated Methods from MonoBehaviour
 	protected virtual void Awake ()
 	{
@@ -53,7 +57,8 @@ public abstract class Tetris : MonoBehaviour
 		StartCoroutine (AutoFall ());
 	}
 
-	void ReviseInitPosition () {
+	void ReviseInitPosition ()
+	{
 		int leakY = 0;
 		foreach (GameObject brick in bricks) {
 			int y = (int)brick.transform.position.y;
@@ -94,9 +99,26 @@ public abstract class Tetris : MonoBehaviour
 		}
 
 		//   'Arrow Left' or 'Right' -> Horizontal movement by one unit
+		if (Input.GetKeyDown(KeyCode.LeftArrow) || Input.GetKeyDown(KeyCode.RightArrow)) {
+			pressedEnabled = true;
+		}
+
+		if (pressedEnabled) {
+			pressedTime += Time.deltaTime;
+		}
+
 		int h = (int)Input.GetAxisRaw ("Horizontal");
 		if (h != 0 && CanHorizontalMove (h)) {
-			StartCoroutine (HorizontalMove (h, GameController.instance.movingUnitTime));
+			if (pressedTime < 0.3f) {
+				StartCoroutine (HorizontalMove (h, 0.1f));
+			} else {
+				StartCoroutine (HorizontalMove (h, 0.01f));
+			}
+		}
+
+		if (Input.GetKeyUp(KeyCode.LeftArrow) || Input.GetKeyUp(KeyCode.RightArrow)) {
+			pressedTime = 0f;
+			pressedEnabled = false;
 		}
 
 		//   'Down' -> Fall one unit immediately
