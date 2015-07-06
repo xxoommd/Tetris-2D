@@ -117,33 +117,47 @@ public abstract class Tetris : MonoBehaviour
 		}
 
 		// Calculating Revised X;
+		int[] directionFactors = new int[]{-1, 1};
+		bool[] directionEnabled = new bool[] {true, true};
 		for (int absX = 0; absX < 20; absX++) {
-			for (int directionFactor = -1; directionFactor <= 1; directionFactor += 2) {
-				int potentialX = (int)(transform.position.x) + absX * directionFactor;
+			for (int i = 0; i < 2; i++) {
+				if (!directionEnabled[i]) {
+					continue;
+				}
 
-				Vector2 pos = transform.position;
-				pos.x = potentialX;
-				tetrisClone.transform.position = pos;
+				int directionFactor = directionFactors [i];
+				int movedX = absX * directionFactor;
 
-				bool isOK = true;
-				foreach (GameObject brick in bricksClone) {
-					int x = (int)brick.transform.position.x;
-					int y = (int)brick.transform.position.y;
-
-					Debug.Log (string.Format ("brick's new position: ({0}, {1})", x, y));
-	
-					if (x < 0 || x > 19 || board.brickBoxes [x, y] != null) {
-						isOK = false;
-						break;
+				if (CanHorizontalMove(movedX)) {
+					int potentialX = (int)(transform.position.x) + absX * directionFactor;
+					
+					Vector2 pos = transform.position;
+					pos.x = potentialX;
+					tetrisClone.transform.position = pos;
+					
+					bool isOK = true;
+					foreach (GameObject brick in bricksClone) {
+						int x = (int)brick.transform.position.x;
+						int y = (int)brick.transform.position.y;
+						
+						Debug.Log (string.Format ("brick's new position: ({0}, {1})", x, y));
+						
+						if (x < 0 || x > 19 || board.brickBoxes [x, y] != null) {
+							isOK = false;
+							break;
+						}
 					}
+					
+					if (isOK) {
+						revisedX = potentialX - (int)transform.position.x;
+						Debug.Log ("in: Revised X: " + revisedX.ToString ());
+						Destroy (tetrisClone);
+						return true;
+					}
+				} else {
+					directionEnabled[i] = false;
 				}
 
-				if (isOK) {
-					revisedX = potentialX - (int)transform.position.x;
-					Debug.Log ("in: Revised X: " + revisedX.ToString ());
-					Destroy (tetrisClone);
-					return true;
-				}
 			}
 		}
 
@@ -185,6 +199,8 @@ public abstract class Tetris : MonoBehaviour
 
 				return true;
 			}
+		} else {
+			return true;
 		}
 
 		return false;
