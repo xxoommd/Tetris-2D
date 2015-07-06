@@ -7,14 +7,30 @@ public class Board : MonoBehaviour
 	[HideInInspector]
 	public GameObject[,]
 		brickBoxes;
+	public GameObject wall;
 	
 	//
 	private List<int> rowsToClear;
 
 	void Awake ()
 	{
+		InitWalls ();
+
 		brickBoxes = new GameObject[20, 30];
 		rowsToClear = new List<int> ();
+	}
+
+	void InitWalls ()
+	{
+		for (int x = 0; x < 20; x++) {
+			Instantiate (wall, new Vector3 (x, -1, 0), Quaternion.identity);
+			Instantiate (wall, new Vector3 (x, 30, 0), Quaternion.identity);
+		}
+
+		for (int y = -1; y < 31; y++) {
+			Instantiate (wall, new Vector3 (-1, y, 0), Quaternion.identity);
+			Instantiate (wall, new Vector3 (20, y, 0), Quaternion.identity);
+		}
 	}
 
 	public void CheckClear ()
@@ -46,29 +62,30 @@ public class Board : MonoBehaviour
 			foreach (int y0 in rowsToClear) {
 				for (int y = y0; y < 30; y++) {
 					for (int x = 0; x < 20; x++) {
-						if (brickBoxes[x, y] != null) {
-							Vector2 newPos = brickBoxes[x, y].transform.position;
+						if (brickBoxes [x, y] != null) {
+							Vector2 newPos = brickBoxes [x, y].transform.position;
 							newPos.y--;
-							brickBoxes[x, y].transform.position = newPos;
+							brickBoxes [x, y].transform.position = newPos;
 						}
 					}
 				}
 			}
 
-			RelocateBricksByTheirPositions();
+			RelocateBricksByTheirPositions ();
 
 		}
 	}
 
-	private void RelocateBricksByTheirPositions() {
+	private void RelocateBricksByTheirPositions ()
+	{
 		GameObject[,] newBrickBoxes = new GameObject[20, 30];
 
 		for (int x = 0; x < 20; x++) {
 			for (int y = 0; y < 30; y++) {
-				if (brickBoxes[x, y] != null) {
-					int x0 = (int)brickBoxes[x, y].transform.position.x;
-					int y0 = (int)brickBoxes[x, y].transform.position.y;
-					newBrickBoxes[x0, y0] = brickBoxes[x, y];
+				if (brickBoxes [x, y] != null) {
+					int x0 = (int)brickBoxes [x, y].transform.position.x;
+					int y0 = (int)brickBoxes [x, y].transform.position.y;
+					newBrickBoxes [x0, y0] = brickBoxes [x, y];
 				}
 			}
 		}

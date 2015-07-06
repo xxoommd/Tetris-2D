@@ -15,6 +15,7 @@ public abstract class Tetris : MonoBehaviour
 	protected int directionIndex;
 
 	// Private variables
+	private bool initialOK = false;
 	private bool turning = false;
 	private bool moving = false;
 	private bool upMoveDisabled = false;
@@ -43,12 +44,38 @@ public abstract class Tetris : MonoBehaviour
 
 	protected virtual void Start ()
 	{
+		ReviseInitPosition ();
+		if (!CheckValid ()) {
+			GameController.instance.GameOver ();
+		}
+
 		board = GameController.instance.board;
 		StartCoroutine (AutoFall (0.5f));
 	}
 
+	void ReviseInitPosition () {
+		int leakY = 0;
+		foreach (GameObject brick in bricks) {
+			int y = (int)brick.transform.position.y;
+			if (y - 28 > leakY) {
+				leakY = y - 28;
+			}
+		}
+		
+		if (leakY != 0) {
+			Vector3 newPosition = transform.position;
+			newPosition.y -= leakY;
+			transform.position = newPosition;
+		}
+		initialOK = true;
+	}
+	
 	protected virtual void Update ()
 	{
+		if (!initialOK) {
+			return;
+		}
+
 		if (reachBottom) {
 			StartCoroutine (TransferToBricksAndDestroy ());
 			return;
@@ -62,7 +89,6 @@ public abstract class Tetris : MonoBehaviour
 		int revisedX = 0;
 		if (Input.GetButtonUp ("Fire1") || Input.GetKeyUp (KeyCode.UpArrow)) {
 			if (CanTurn (ref revisedX)) {
-				Debug.Log("out: Revised X: " + revisedX.ToString());
 				StartCoroutine (Turn (revisedX));
 			}
 		}
@@ -90,6 +116,20 @@ public abstract class Tetris : MonoBehaviour
 	}
 
 	// Self-defined methods
+	public bool CheckValid ()
+	{
+		foreach (GameObject brick in bricks) {
+			int x = (int)brick.transform.position.x;
+			int y = (int)brick.transform.position.y;
+
+			if (GameController.instance.board.brickBoxes [x, y] != null) {
+				return false;
+			}
+		}
+
+		return true;
+	}
+
 	void Move (int h, int v)
 	{
 		Vector2 pos = transform.position;
@@ -121,14 +161,14 @@ public abstract class Tetris : MonoBehaviour
 		bool[] directionEnabled = new bool[] {true, true};
 		for (int absX = 0; absX < 20; absX++) {
 			for (int i = 0; i < 2; i++) {
-				if (!directionEnabled[i]) {
+				if (!directionEnabled [i]) {
 					continue;
 				}
 
 				int directionFactor = directionFactors [i];
 				int movedX = absX * directionFactor;
 
-				if (CanHorizontalMove(movedX)) {
+				if (CanHorizontalMove (movedX)) {
 					int potentialX = (int)(transform.position.x) + absX * directionFactor;
 					
 					Vector2 pos = transform.position;
@@ -140,8 +180,6 @@ public abstract class Tetris : MonoBehaviour
 						int x = (int)brick.transform.position.x;
 						int y = (int)brick.transform.position.y;
 						
-						Debug.Log (string.Format ("brick's new position: ({0}, {1})", x, y));
-						
 						if (x < 0 || x > 19 || board.brickBoxes [x, y] != null) {
 							isOK = false;
 							break;
@@ -150,12 +188,11 @@ public abstract class Tetris : MonoBehaviour
 					
 					if (isOK) {
 						revisedX = potentialX - (int)transform.position.x;
-						Debug.Log ("in: Revised X: " + revisedX.ToString ());
 						Destroy (tetrisClone);
 						return true;
 					}
 				} else {
-					directionEnabled[i] = false;
+					directionEnabled [i] = false;
 				}
 
 			}
@@ -202,8 +239,6 @@ public abstract class Tetris : MonoBehaviour
 		} else {
 			return true;
 		}
-
-		return false;
 	}
 
 	bool CanVerticalMove (int v)

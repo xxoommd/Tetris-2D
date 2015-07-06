@@ -7,14 +7,17 @@ public class GameController : MonoBehaviour
 	//
 	public static GameController instance = null;
 	public GameObject[] tetrisTemplates;
+	[HideInInspector]
 	public Board board;
-	public Transform spawnSpot;
 	public float fallingUnitTime = 0.1f;
 	public float movingUnitTime = 0.1f;
 	public Vector2 boundary;
+	public UnityEngine.UI.Text gameOverText;
+
 
 	//
 	private GameObject currentTetris = null;
+	private bool isGameOver = false;
 
 	void Awake ()
 	{
@@ -24,6 +27,7 @@ public class GameController : MonoBehaviour
 			Destroy (gameObject);
 		}
 		DontDestroyOnLoad (gameObject);
+		gameOverText.enabled = false;
 	}
 
 	void Start ()
@@ -33,10 +37,33 @@ public class GameController : MonoBehaviour
 
 	void Update ()
 	{
+		if (isGameOver) {
+			return;
+		}
+
 		if (currentTetris == null) {
 			currentTetris = Instantiate (tetrisTemplates [Random.Range (0, tetrisTemplates.Length)]) as GameObject;
 			currentTetris.transform.SetParent (board.transform);
-			currentTetris.transform.position = spawnSpot.position;
+			currentTetris.transform.position = new Vector3 (10, 28, 0);
 		}
 	}
+
+	public void GameOver () {
+		isGameOver = true;
+		gameOverText.enabled = true;
+	}
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
