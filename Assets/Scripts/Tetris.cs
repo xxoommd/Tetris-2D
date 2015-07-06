@@ -50,7 +50,7 @@ public abstract class Tetris : MonoBehaviour
 		}
 
 		board = GameController.instance.board;
-		StartCoroutine (AutoFall (0.5f));
+		StartCoroutine (AutoFall ());
 	}
 
 	void ReviseInitPosition () {
@@ -96,7 +96,7 @@ public abstract class Tetris : MonoBehaviour
 		//   'Arrow Left' or 'Right' -> Horizontal movement by one unit
 		int h = (int)Input.GetAxisRaw ("Horizontal");
 		if (h != 0 && CanHorizontalMove (h)) {
-			StartCoroutine (HorizontalMove (h));
+			StartCoroutine (HorizontalMove (h, GameController.instance.movingUnitTime));
 		}
 
 		//   'Down' -> Fall one unit immediately
@@ -270,7 +270,7 @@ public abstract class Tetris : MonoBehaviour
 		return CanVerticalMove (-1);
 	}
 
-	IEnumerator AutoFall (float fallingSpeed = 0.05f)
+	IEnumerator AutoFall ()
 	{
 		while (CanAutoFall()) {
 			if (reachBottom) {
@@ -283,7 +283,7 @@ public abstract class Tetris : MonoBehaviour
 
 			Move (0, -1);
 			
-			yield return new WaitForSeconds (fallingSpeed);
+			yield return new WaitForSeconds (GameController.instance.fallingUnitTime);
 		}
 	}
 

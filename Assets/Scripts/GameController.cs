@@ -1,6 +1,7 @@
 ﻿using UnityEngine;
 using System.Collections;
 using Random = UnityEngine.Random;
+using UnityEngine.UI;
 
 public class GameController : MonoBehaviour
 {
@@ -12,7 +13,7 @@ public class GameController : MonoBehaviour
 	public float fallingUnitTime = 0.1f;
 	public float movingUnitTime = 0.1f;
 	public Vector2 boundary;
-	public UnityEngine.UI.Text gameOverText;
+	public Text gameOverText;
 
 
 	//
