@@ -38,4 +38,9 @@ public class Tetris_J : Tetris
 			}
 		};
 	}
+
+	protected override GameObject getBrickTemplate ()
+	{
+		return GameController.instance.brickJ;
+	}
 }

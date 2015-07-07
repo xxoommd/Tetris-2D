@@ -34,4 +34,9 @@ public class Tetris_T : Tetris {
 			},
 		};
 	}
+
+	protected override GameObject getBrickTemplate ()
+	{
+		return GameController.instance.brickT;
+	}
 }

@@ -22,4 +22,9 @@ public class Tetris_Z : Tetris {
 			}
 		};
 	}
+
+	protected override GameObject getBrickTemplate ()
+	{
+		return GameController.instance.brickT;
+	}
 }

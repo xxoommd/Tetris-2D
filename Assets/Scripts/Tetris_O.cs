@@ -17,4 +17,9 @@ public class Tetris_O : Tetris
 			}
 		};
 	}
+
+	protected override GameObject getBrickTemplate ()
+	{
+		return GameController.instance.brickO;
+	}
 }

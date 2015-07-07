@@ -23,4 +23,9 @@ public class Tetris_S : Tetris
 			}
 		};
 	}
+
+	protected override GameObject getBrickTemplate ()
+	{
+		return GameController.instance.brickS;
+	}
 }

@@ -4,10 +4,6 @@ using Random = UnityEngine.Random;
 
 public abstract class Tetris : MonoBehaviour
 {
-
-	// Public variables showing in inspector
-	public GameObject[] brickTemplates;
-
 	// Protected variables
 	protected GameObject[] bricks;
 	protected Vector2[,] coordinates;
@@ -24,18 +20,20 @@ public abstract class Tetris : MonoBehaviour
 	private bool reachBottom = false;
 	private Board board;
 
-	// Long press makes move faster
+	// Keyboard: Long press makes move faster
+#if UNITY_EDITOR || UNITY_STANDALONE || UNITY_WEBPLAYER || UNITY_WEBGL
 	private bool leftPressedEnabled = false;
 	private float leftPressedTime = 0f;
 	private bool rightPressedEnabled = false;
 	private float rightPressedTime = 0f;
+#endif
 
 	// Inheritated Methods from MonoBehaviour
 	protected virtual void Awake ()
 	{
 		InitialAllCoordinates ();
 
-		GameObject brick = brickTemplates [Random.Range (0, brickTemplates.Length)];
+		GameObject brick = getBrickTemplate ();
 
 		directionIndex = Random.Range (0, directionSize);
 		bricks = new GameObject[4];
@@ -64,8 +62,9 @@ public abstract class Tetris : MonoBehaviour
 		int leakY = 0;
 		foreach (GameObject brick in bricks) {
 			int y = (int)brick.transform.position.y;
-			if (y - 28 > leakY) {
-				leakY = y - 28;
+			int maxHeight = GameController.instance.playground.height - 2;
+			if (y - maxHeight > leakY) {
+				leakY = y - maxHeight;
 			}
 		}
 		
@@ -101,11 +100,11 @@ public abstract class Tetris : MonoBehaviour
 		}
 
 		//   'Arrow Left' or 'Right' -> Horizontal movement by one unit
-		if (Input.GetKeyDown(KeyCode.LeftArrow)) {
+		if (Input.GetKey(KeyCode.LeftArrow)) {
 			leftPressedEnabled = true;
 		}
 
-		if (Input.GetKeyDown(KeyCode.RightArrow)) {
+		if (Input.GetKey(KeyCode.RightArrow)) {
 			rightPressedEnabled = true;
 		}
 
@@ -197,7 +196,7 @@ public abstract class Tetris : MonoBehaviour
 		// Calculating Revised X;
 		int[] directionFactors = new int[]{-1, 1};
 		bool[] directionEnabled = new bool[] {true, true};
-		for (int absX = 0; absX < 20; absX++) {
+		for (int absX = 0; absX < GameController.instance.playground.width; absX++) {
 			for (int i = 0; i < 2; i++) {
 				if (!directionEnabled [i]) {
 					continue;
@@ -218,7 +217,7 @@ public abstract class Tetris : MonoBehaviour
 						int x = (int)brick.transform.position.x;
 						int y = (int)brick.transform.position.y;
 						
-						if (x < 0 || x > 19 || board.brickBoxes [x, y] != null) {
+						if (x < 0 || x >= GameController.instance.playground.width || board.brickBoxes [x, y] != null) {
 							isOK = false;
 							break;
 						}
@@ -267,7 +266,7 @@ public abstract class Tetris : MonoBehaviour
 				foreach (GameObject brick in bricks) {
 					int nextX = (int)brick.transform.position.x + h;
 					int nextY = (int)brick.transform.position.y;
-					if (nextX < 0 || nextX > (int)GameController.instance.boundary.x || board.brickBoxes [nextX, nextY] != null) {
+					if (nextX < 0 || nextX >= GameController.instance.playground.width || board.brickBoxes [nextX, nextY] != null) {
 						return false;
 					}
 				}
@@ -290,7 +289,7 @@ public abstract class Tetris : MonoBehaviour
 			foreach (GameObject brick in bricks) {
 				int nextX = (int)brick.transform.position.x;
 				int nextY = (int)brick.transform.position.y + v;
-				if (nextY < 0 || nextY > (int)GameController.instance.boundary.y || board.brickBoxes [nextX, nextY] != null) {
+				if (nextY < 0 || nextY >= GameController.instance.playground.height || board.brickBoxes [nextX, nextY] != null) {
 					reachBottom = true;
 					return false;
 				}
@@ -388,6 +387,7 @@ public abstract class Tetris : MonoBehaviour
 	}
 
 	protected abstract void InitialAllCoordinates ();
+	protected abstract GameObject getBrickTemplate ();
 }
 
 

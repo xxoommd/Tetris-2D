@@ -25,4 +25,8 @@ public class Tetris_I : Tetris
 		};
 	}
 
+	protected override GameObject getBrickTemplate ()
+	{
+		return GameController.instance.brickI;
+	}
 }
