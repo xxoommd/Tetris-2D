@@ -25,8 +25,10 @@ public abstract class Tetris : MonoBehaviour
 	private Board board;
 
 	// Long press makes move faster
-	private bool pressedEnabled = false;
-	private float pressedTime = 0f;
+	private bool leftPressedEnabled = false;
+	private float leftPressedTime = 0f;
+	private bool rightPressedEnabled = false;
+	private float rightPressedTime = 0f;
 
 	// Inheritated Methods from MonoBehaviour
 	protected virtual void Awake ()
@@ -99,26 +101,40 @@ public abstract class Tetris : MonoBehaviour
 		}
 
 		//   'Arrow Left' or 'Right' -> Horizontal movement by one unit
-		if (Input.GetKeyDown(KeyCode.LeftArrow) || Input.GetKeyDown(KeyCode.RightArrow)) {
-			pressedEnabled = true;
+		if (Input.GetKeyDown(KeyCode.LeftArrow)) {
+			leftPressedEnabled = true;
 		}
 
-		if (pressedEnabled) {
-			pressedTime += Time.deltaTime;
+		if (Input.GetKeyDown(KeyCode.RightArrow)) {
+			rightPressedEnabled = true;
+		}
+
+		if (leftPressedEnabled) {
+			leftPressedTime += Time.deltaTime;
+		}
+
+		if (rightPressedEnabled) {
+			rightPressedTime += Time.deltaTime;
 		}
 
 		int h = (int)Input.GetAxisRaw ("Horizontal");
 		if (h != 0 && CanHorizontalMove (h)) {
-			if (pressedTime < 0.3f) {
-				StartCoroutine (HorizontalMove (h, 0.1f));
-			} else {
-				StartCoroutine (HorizontalMove (h, 0.01f));
+			float moveDelay = 0.1f;
+			if ((h < 0 && leftPressedTime > 0.1f) || (h > 0 && rightPressedTime > 0.1f)) {
+				moveDelay = 0.01f;
 			}
+
+			StartCoroutine(HorizontalMove(h, moveDelay));
 		}
 
-		if (Input.GetKeyUp(KeyCode.LeftArrow) || Input.GetKeyUp(KeyCode.RightArrow)) {
-			pressedTime = 0f;
-			pressedEnabled = false;
+		if (Input.GetKeyUp(KeyCode.LeftArrow)) {
+			leftPressedTime = 0f;
+			leftPressedEnabled = false;
+		}
+
+		if (Input.GetKeyUp(KeyCode.RightArrow)) {
+			rightPressedTime = 0f;
+			rightPressedEnabled = false;
 		}
 
 		//   'Down' -> Fall one unit immediately
