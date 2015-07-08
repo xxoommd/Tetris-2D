@@ -83,7 +83,7 @@ public abstract class Tetris : MonoBehaviour
 		}
 
 		if (reachBottom) {
-			StartCoroutine (TransferToBricksAndDestroy ());
+			TransferToBricksAndDestroy ();
 			return;
 		}
 
@@ -159,7 +159,7 @@ public abstract class Tetris : MonoBehaviour
 			int x = (int)brick.transform.position.x;
 			int y = (int)brick.transform.position.y;
 
-			if (GameController.instance.board.brickBoxes [x, y] != null) {
+			if (GameController.instance.board.brickMatrix [x, y]) {
 				return false;
 			}
 		}
@@ -217,7 +217,7 @@ public abstract class Tetris : MonoBehaviour
 						int x = (int)brick.transform.position.x;
 						int y = (int)brick.transform.position.y;
 						
-						if (x < 0 || x >= GameController.instance.playground.width || board.brickBoxes [x, y] != null) {
+						if (x < 0 || x >= GameController.instance.playground.width || board.brickMatrix [x, y]) {
 							isOK = false;
 							break;
 						}
@@ -266,7 +266,7 @@ public abstract class Tetris : MonoBehaviour
 				foreach (GameObject brick in bricks) {
 					int nextX = (int)brick.transform.position.x + h;
 					int nextY = (int)brick.transform.position.y;
-					if (nextX < 0 || nextX >= GameController.instance.playground.width || board.brickBoxes [nextX, nextY] != null) {
+					if (nextX < 0 || nextX >= GameController.instance.playground.width || board.brickMatrix [nextX, nextY]) {
 						return false;
 					}
 				}
@@ -289,7 +289,7 @@ public abstract class Tetris : MonoBehaviour
 			foreach (GameObject brick in bricks) {
 				int nextX = (int)brick.transform.position.x;
 				int nextY = (int)brick.transform.position.y + v;
-				if (nextY < 0 || nextY >= GameController.instance.playground.height || board.brickBoxes [nextX, nextY] != null) {
+				if (nextY < 0 || nextY >= GameController.instance.playground.height || board.brickMatrix [nextX, nextY]) {
 					reachBottom = true;
 					return false;
 				}
@@ -370,20 +370,25 @@ public abstract class Tetris : MonoBehaviour
 		movingDown = false;
 	}
 
-	IEnumerator TransferToBricksAndDestroy ()
+	void TransferToBricksAndDestroy ()
 	{
-		yield return new WaitForSeconds (0.15f);
-
 		foreach (GameObject brick in bricks) {
+			brick.transform.SetParent (board.transform);
+
 			int x = (int)brick.transform.position.x;
 			int y = (int)brick.transform.position.y;
+			board.brickMatrix[x, y] = true;
 
-			board.brickBoxes [x, y] = brick;
-			brick.transform.SetParent (board.transform);
+			if (board.maxHeight < y) {
+				board.maxHeight = y;
+			}
 		}
 
-		Destroy (gameObject);
+		GameController.instance.isCleaning = true;
 		board.CheckClear ();
+
+		Destroy (gameObject);
+
 	}
 
 	protected abstract void InitialAllCoordinates ();

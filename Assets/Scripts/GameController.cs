@@ -31,8 +31,10 @@ public class GameController : MonoBehaviour
 
 
 	//
+	public GameObject wallTemplate;
 	public static GameController instance = null;
 	public GameObject[] tetrisTemplates;
+	[HideInInspector]public bool isCleaning = false;
 	[HideInInspector]
 	public Board board;
 	public float fallingUnitTime = 0.1f;
@@ -41,6 +43,7 @@ public class GameController : MonoBehaviour
 	//
 	private GameObject currentTetris = null;
 	private bool isGameOver = false;
+
 
 	void Awake ()
 	{
@@ -69,6 +72,8 @@ public class GameController : MonoBehaviour
 		Camera camera = Camera.main;
 		camera.transform.position = new Vector3 (playground.width / 2 - 0.5f, playground.height / 2 - 0.5f, camera.transform.position.z);
 		camera.orthographicSize = playground.height / 2 + 1f;
+
+		InitWalls ();
 	}
 
 	void Update ()
@@ -77,12 +82,31 @@ public class GameController : MonoBehaviour
 			return;
 		}
 
-		if (currentTetris == null) {
+		if (currentTetris == null && !isCleaning) {
 			currentTetris = Instantiate (tetrisTemplates [Random.Range (0, tetrisTemplates.Length)]) as GameObject;
-			currentTetris.transform.SetParent (board.transform);
 			currentTetris.transform.position = new Vector3 (playground.width / 2, playground.height - 2, 0);
 		}
 	}
+
+	void InitWalls ()
+	{
+		GameObject wall = new GameObject ("Walls");
+
+		for (int x = 0; x < playground.width; x++) {
+			GameObject wall1 = Instantiate (wallTemplate, new Vector3 (x, -1, 0), Quaternion.identity) as GameObject;
+			GameObject wall2 = Instantiate (wallTemplate, new Vector3 (x, playground.height, 0), Quaternion.identity) as GameObject;
+			wall1.transform.SetParent (wall.transform);
+			wall2.transform.SetParent (wall.transform);
+		}
+		
+		for (int y = -1; y < playground.height + 1; y++) {
+			GameObject wall1 = Instantiate (wallTemplate, new Vector3 (-1, y, 0), Quaternion.identity) as GameObject;
+			GameObject wall2 = Instantiate (wallTemplate, new Vector3 (playground.width, y, 0), Quaternion.identity) as GameObject;
+			wall1.transform.SetParent (wall.transform);
+			wall2.transform.SetParent (wall.transform);
+		}
+	}
+
 
 	public void GameOver ()
 	{
