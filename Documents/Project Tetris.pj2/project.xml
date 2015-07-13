@@ -1587,7 +1587,7 @@
 			<key>concernedResources</key>
 			<array/>
 			<key>duration</key>
-			<integer>9000</integer>
+			<integer>27000</integer>
 			<key>fillColor</key>
 			<data>
 			YnBsaXN0MDDUAQIDBAUGFhdYJHZlcnNpb25YJG9iamVjdHNZJGFy
@@ -1620,7 +1620,7 @@
 			<key>outboundDependencies</key>
 			<array/>
 			<key>progress</key>
-			<real>0.0</real>
+			<real>1</real>
 			<key>subitems</key>
 			<array/>
 			<key>tag</key>
@@ -1704,7 +1704,7 @@
 				<key>month</key>
 				<integer>7</integer>
 				<key>secondOfDay</key>
-				<integer>50400</integer>
+				<integer>61200</integer>
 				<key>year</key>
 				<integer>2015</integer>
 			</dict>
@@ -1713,7 +1713,7 @@
 			<key>concernedResources</key>
 			<array/>
 			<key>duration</key>
-			<integer>14400</integer>
+			<integer>5400</integer>
 			<key>fillColor</key>
 			<data>
 			YnBsaXN0MDDUAQIDBAUGFhdYJHZlcnNpb25YJG9iamVjdHNZJGFy
@@ -1746,7 +1746,7 @@
 			<key>outboundDependencies</key>
 			<array/>
 			<key>progress</key>
-			<real>0.0</real>
+			<real>1</real>
 			<key>subitems</key>
 			<array/>
 			<key>tag</key>
