@@ -13,5 +13,7 @@ public class PauseMenuEvents : MonoBehaviour {
 
 	public void OnClickResume () {
 		Debug.Log ("=== Click Resume button ===");
+		Destroy (gameObject);
+		GameController.instance.isPaused = false;
 	}
 }

@@ -82,6 +82,10 @@ public abstract class Tetris : MonoBehaviour
 			return;
 		}
 
+		if (GameController.instance.isPaused) {
+			return;
+		}
+
 		if (reachBottom) {
 			TransferToBricksAndDestroy ();
 			return;
@@ -93,7 +97,7 @@ public abstract class Tetris : MonoBehaviour
 
 		//   'Fire1' or 'Arrow Up' -> Turn
 		int revisedX = 0;
-		if (Input.GetButtonUp ("Fire1") || Input.GetKeyUp (KeyCode.UpArrow)) {
+		if (Input.GetKeyUp (KeyCode.UpArrow)) {
 			if (CanTurn (ref revisedX)) {
 				StartCoroutine (Turn (revisedX));
 			}
@@ -314,8 +318,14 @@ public abstract class Tetris : MonoBehaviour
 				break;
 			}
 
+			if (GameController.instance.isPaused) {
+				yield return new WaitForSeconds (0.1f);
+				continue;
+			}
+
 			if (autoFallDisabled) {
 				yield return new WaitForSeconds (0.1f);
+				continue;
 			}
 
 			Move (0, -1);

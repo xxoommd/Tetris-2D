@@ -15,39 +15,51 @@ public class GameController : MonoBehaviour
 	// Tetris templates
 	public GameObject[] brickTemplates;
 	[HideInInspector]
-	public GameObject brickI;
+	public GameObject
+		brickI;
 	[HideInInspector]
-	public GameObject brickJ;
+	public GameObject
+		brickJ;
 	[HideInInspector]
-	public GameObject brickL;
+	public GameObject
+		brickL;
 	[HideInInspector]
-	public GameObject brickS;
+	public GameObject
+		brickS;
 	[HideInInspector]
-	public GameObject brickZ;
+	public GameObject
+		brickZ;
 	[HideInInspector]
-	public GameObject brickO;
+	public GameObject
+		brickO;
 	[HideInInspector]
-	public GameObject brickT;
+	public GameObject
+		brickT;
 
 
 	//
 	public GameObject wallTemplate;
 	public static GameController instance = null;
 	public GameObject[] tetrisTemplates;
-	[HideInInspector]public bool isCleaning = false;
 	[HideInInspector]
-	public Board board;
+	public bool isCleaning = false;
+	[HideInInspector]
+	public Board
+		board;
 	public GameObject boardObject;
 	public float fallingUnitTime = 0.1f;
 	public PlayGround playground;
 	public GameObject mainUI;
 	public GameObject pauseUI;
 	public GameObject gameoverUI;
+	[HideInInspector]
+	public bool
+		isPaused = false;
 
 	//
 	private GameObject currentTetris = null;
-	[HideInInspector] public bool isGameOver = true;
-
+	[HideInInspector]
+	public bool isGameOver = true;
 
 	void Awake ()
 	{
@@ -77,7 +89,8 @@ public class GameController : MonoBehaviour
 		camera.orthographicSize = playground.height / 2 + 1f;
 	}
 
-	public void InitGame () {
+	public void InitGame ()
+	{
 		GameObject boardObj = Instantiate (boardObject) as GameObject;
 		board = boardObj.GetComponent<Board> ();
 
@@ -85,7 +98,8 @@ public class GameController : MonoBehaviour
 		isGameOver = false;
 	}
 
-	public void DestroyGame () {
+	public void DestroyGame ()
+	{
 		isGameOver = true;
 
 		GameObject wall = GameObject.Find ("Walls");
@@ -97,12 +111,14 @@ public class GameController : MonoBehaviour
 		}
 	}
 
-	public void RestartGame () {
+	public void RestartGame ()
+	{
 		DestroyGame ();
 		InitGame ();
 	}
 
-	public void ShowMainUI () {
+	public void ShowMainUI ()
+	{
 		Instantiate (mainUI);
 	}
 
@@ -112,8 +128,9 @@ public class GameController : MonoBehaviour
 			return;
 		}
 
-		if (Input.GetKeyUp(KeyCode.P)) {
+		if (Input.GetKeyUp (KeyCode.P)) {
 			Instantiate (pauseUI);
+			isPaused = true;
 		}
 
 		if (currentTetris == null && !isCleaning) {
@@ -140,7 +157,6 @@ public class GameController : MonoBehaviour
 			wall2.transform.SetParent (wall.transform);
 		}
 	}
-
 
 	public void GameOver ()
 	{
