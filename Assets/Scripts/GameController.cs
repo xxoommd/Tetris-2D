@@ -37,12 +37,16 @@ public class GameController : MonoBehaviour
 	[HideInInspector]public bool isCleaning = false;
 	[HideInInspector]
 	public Board board;
+	public GameObject boardObject;
 	public float fallingUnitTime = 0.1f;
 	public PlayGround playground;
-	public Text gameOverText;
+	public GameObject mainUI;
+	public GameObject pauseUI;
+	public GameObject gameoverUI;
+
 	//
 	private GameObject currentTetris = null;
-	private bool isGameOver = false;
+	[HideInInspector] public bool isGameOver = true;
 
 
 	void Awake ()
@@ -53,7 +57,6 @@ public class GameController : MonoBehaviour
 			Destroy (gameObject);
 		}
 		DontDestroyOnLoad (gameObject);
-		gameOverText.enabled = false;
 
 		brickI = brickTemplates [0];
 		brickJ = brickTemplates [1];
@@ -66,20 +69,51 @@ public class GameController : MonoBehaviour
 
 	void Start ()
 	{
-		board = GameObject.Find ("Board").GetComponent<Board> ();
+		ShowMainUI ();
 
 		// Adjust main camera.
 		Camera camera = Camera.main;
 		camera.transform.position = new Vector3 (playground.width / 2 - 0.5f, playground.height / 2 - 0.5f, camera.transform.position.z);
 		camera.orthographicSize = playground.height / 2 + 1f;
+	}
+
+	public void InitGame () {
+		GameObject boardObj = Instantiate (boardObject) as GameObject;
+		board = boardObj.GetComponent<Board> ();
 
 		InitWalls ();
+		isGameOver = false;
+	}
+
+	public void DestroyGame () {
+		isGameOver = true;
+
+		GameObject wall = GameObject.Find ("Walls");
+		Destroy (wall);
+		Destroy (board.gameObject);
+
+		if (currentTetris) {
+			Destroy (currentTetris);
+		}
+	}
+
+	public void RestartGame () {
+		DestroyGame ();
+		InitGame ();
+	}
+
+	public void ShowMainUI () {
+		Instantiate (mainUI);
 	}
 
 	void Update ()
 	{
 		if (isGameOver) {
 			return;
+		}
+
+		if (Input.GetKeyUp(KeyCode.P)) {
+			Instantiate (pauseUI);
 		}
 
 		if (currentTetris == null && !isCleaning) {
@@ -111,7 +145,7 @@ public class GameController : MonoBehaviour
 	public void GameOver ()
 	{
 		isGameOver = true;
-		gameOverText.enabled = true;
+		Instantiate (gameoverUI);
 	}
 }
 

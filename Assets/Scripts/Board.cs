@@ -8,14 +8,22 @@ public class Board : MonoBehaviour
 	public bool[,] brickMatrix;
 	GameController gameController;
 	[HideInInspector]public int maxHeight = 0;
-	public GameObject garbage;
+	public GameObject garbageTemplate;
+	[HideInInspector]public GameObject garbage;
 
 	void Start ()
 	{
 		gameController = GameController.instance;
+		garbage = Instantiate (garbageTemplate) as GameObject;
 
 		brickMatrix = new bool[gameController.playground.width, gameController.playground.height];
 		InitBrickMatrix ();
+	}
+
+	void OnDestroy () {
+		if (garbage) {
+			Destroy (garbage);
+		}
 	}
 
 	void InitBrickMatrix () {
