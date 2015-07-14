@@ -4,9 +4,9 @@ using System.Collections;
 public class GameOverMenuEvents : MonoBehaviour {
 
 	public void OnClickMain () {
-		GameController.instance.DestroyGame ();
+		GameController.instance.QuitGame ();
 		Destroy (gameObject);
-		GameController.instance.ShowMainUI ();
+		UIController.instance.Show ("Main UI");
 	}
 
 	public void OnClickRestart () {

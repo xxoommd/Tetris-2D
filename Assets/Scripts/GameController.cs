@@ -49,9 +49,7 @@ public class GameController : MonoBehaviour
 	public GameObject boardObject;
 	public float fallingUnitTime = 0.1f;
 	public PlayGround playground;
-	public GameObject mainUI;
-	public GameObject pauseUI;
-	public GameObject gameoverUI;
+
 	[HideInInspector]
 	public bool
 		isPaused = false;
@@ -81,24 +79,29 @@ public class GameController : MonoBehaviour
 
 	void Start ()
 	{
-		ShowMainUI ();
-
 		// Adjust main camera.
 		Camera camera = Camera.main;
 		camera.transform.position = new Vector3 (playground.width / 2 - 0.5f, playground.height / 2 - 0.5f, camera.transform.position.z);
 		camera.orthographicSize = playground.height / 2 + 1f;
+
+		UIController.instance.Show ("Main UI");
 	}
 
-	public void InitGame ()
+	public void NewGame ()
 	{
 		GameObject boardObj = Instantiate (boardObject) as GameObject;
 		board = boardObj.GetComponent<Board> ();
 
 		InitWalls ();
+
+		UIController.instance.CloseTop ();
+		UIController.instance.Show ("In Game UI");
+
 		isGameOver = false;
+		isPaused = false;
 	}
 
-	public void DestroyGame ()
+	public void QuitGame ()
 	{
 		isGameOver = true;
 
@@ -109,17 +112,19 @@ public class GameController : MonoBehaviour
 		if (currentTetris) {
 			Destroy (currentTetris);
 		}
+
+		UIController.instance.Close ("In Game UI");
 	}
 
 	public void RestartGame ()
 	{
-		DestroyGame ();
-		InitGame ();
+		QuitGame ();
+		NewGame ();
 	}
 
-	public void ShowMainUI ()
-	{
-		Instantiate (mainUI);
+	public void PauseGame () {
+		UIController.instance.Show ("Pause UI");
+		isPaused = true;
 	}
 
 	void Update ()
@@ -129,8 +134,7 @@ public class GameController : MonoBehaviour
 		}
 
 		if (Input.GetKeyUp (KeyCode.P)) {
-			Instantiate (pauseUI);
-			isPaused = true;
+			PauseGame ();
 		}
 
 		if (currentTetris == null && !isCleaning) {
@@ -161,7 +165,7 @@ public class GameController : MonoBehaviour
 	public void GameOver ()
 	{
 		isGameOver = true;
-		Instantiate (gameoverUI);
+		UIController.instance.Show ("GameOver UI");
 	}
 }
 

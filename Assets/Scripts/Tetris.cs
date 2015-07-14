@@ -97,7 +97,7 @@ public abstract class Tetris : MonoBehaviour
 
 		//   'Fire1' or 'Arrow Up' -> Turn
 		int revisedX = 0;
-		if (Input.GetKeyUp (KeyCode.UpArrow)) {
+		if (Input.GetKeyUp (KeyCode.UpArrow) || Input.GetKeyUp(KeyCode.W)) {
 			if (CanTurn (ref revisedX)) {
 				StartCoroutine (Turn (revisedX));
 			}

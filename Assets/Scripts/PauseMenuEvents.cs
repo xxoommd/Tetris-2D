@@ -4,16 +4,13 @@ using System.Collections;
 public class PauseMenuEvents : MonoBehaviour {
 
 	public void OnClickQuit () {
-		Debug.Log ("=== Click Quit button ===");
-		GameController.instance.DestroyGame ();
-		Destroy (gameObject);
-
-		GameController.instance.ShowMainUI ();
+		GameController.instance.QuitGame ();
+		UIController.instance.Close ("Pause UI");
+		UIController.instance.Show ("Main UI");
 	}
 
 	public void OnClickResume () {
-		Debug.Log ("=== Click Resume button ===");
-		Destroy (gameObject);
 		GameController.instance.isPaused = false;
+		UIController.instance.Close ("Pause UI");
 	}
 }
