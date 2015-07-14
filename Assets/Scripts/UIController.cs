@@ -22,6 +22,13 @@ public class UIController : MonoBehaviour
 
 	public void Show (string name)
 	{
+		foreach (GameObject ui in uiList) {
+			if (ui.name == name) {
+				Debug.Log ("--- " + name + " already shown ---");
+				return;
+			}
+		}
+
 		Object uiObj = Resources.Load ("UI/" + name);
 		if (uiObj) {
 			GameObject newUI = Instantiate (uiObj) as GameObject;

@@ -69,9 +69,17 @@ public class GameController : MonoBehaviour
 	void Start ()
 	{
 		// Adjust main camera.
+
 		Camera camera = Camera.main;
+		Debug.Log ("aspect: " + camera.aspect);
 		camera.transform.position = new Vector3 (playground.width / 2 - 0.5f, playground.height / 2 - 0.5f, camera.transform.position.z);
-		camera.orthographicSize = playground.height / 2 + 1f;
+		camera.orthographicSize = playground.height / 2 + 2f;
+
+		float viewWidth = camera.orthographicSize * 2 * camera.aspect;
+		if (viewWidth < playground.width) {
+			float newSize = (playground.width + 2f) / camera.aspect / 2;
+			camera.orthographicSize = newSize;
+		}
 
 		UIController.instance.Show ("Main UI");
 	}

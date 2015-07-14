@@ -28,6 +28,16 @@ public abstract class Tetris : MonoBehaviour
 	private float rightPressedTime = 0f;
 #endif
 
+#if UNITY_IOS || UNITY_ANDROID || UNITY_WP8
+	private Vector2 touchOrigin = -Vector2.zero;
+	private bool touchEnabled = false;
+	private float fromTouchBegan = 0f;
+	private bool isMoved = false;
+	private bool isHorizontalMoved = false;
+	private bool isVerticalMoved = false;
+#endif
+
+
 	// Inheritated Methods from MonoBehaviour
 	protected virtual void Awake ()
 	{
@@ -96,8 +106,8 @@ public abstract class Tetris : MonoBehaviour
 		// Define controllers: Keyboard
 
 		//   'Fire1' or 'Arrow Up' -> Turn
-		int revisedX = 0;
 		if (Input.GetKeyUp (KeyCode.UpArrow) || Input.GetKeyUp (KeyCode.W)) {
+			int revisedX = 0;
 			if (CanTurn (ref revisedX)) {
 				StartCoroutine (Turn (revisedX));
 			}
@@ -151,8 +161,81 @@ public abstract class Tetris : MonoBehaviour
 			FallDownToBottom ();
 		}
 
-#elif UNITY_IOS
-		// TODO: Touch Controllers
+#endif
+
+#if UNITY_IOS || UNITY_ANDROID || UNITY_WP8
+		if (Input.touchCount > 0) {
+			Touch myTouch = Input.touches[0];
+
+			if (myTouch.phase == TouchPhase.Began) {
+				touchEnabled = true;
+				touchOrigin = myTouch.position;
+				fromTouchBegan = 0f;
+			} else if (myTouch.phase == TouchPhase.Ended) {
+				if (touchEnabled && fromTouchBegan < 0.2f && !isMoved) {
+					int revisedX = 0;
+					if (CanTurn (ref revisedX)) {
+						StartCoroutine (Turn (revisedX));
+					}
+				}
+
+				isMoved = false;
+				isHorizontalMoved = false;
+				isVerticalMoved = false;
+			} else if (myTouch.phase == TouchPhase.Moved) {
+				isMoved = true;
+
+				do {
+					float movedX = myTouch.position.x - touchOrigin.x;
+					float movedY = myTouch.position.y - touchOrigin.y;
+
+					if (!touchEnabled) {
+						break;
+					}
+
+					if (Mathf.Abs(movedX) > Mathf.Abs(movedY)) {
+						if (isVerticalMoved) {
+							break;
+						}
+
+						int ht = 0;
+						if (movedX > 0) {
+							ht = 1;
+						} else if (movedX < 0) {
+							ht = -1;
+						}
+						
+						if (ht != 0 && CanHorizontalMove (ht)) {
+							isHorizontalMoved = true;
+							StartCoroutine (HorizontalMove (ht, 0.07f));
+						}
+					} else {
+						if (isHorizontalMoved) {
+							break;
+						}
+
+						int vt = 0;
+						if (movedY < 0) {
+							vt = -1;
+						}
+
+						if (vt != 0 && CanVerticalMove(vt)) {
+							isVerticalMoved = true;
+							StartCoroutine (VerticalMove(vt, 0.04f));
+						}
+					}
+
+				} while (false);
+
+				touchOrigin = myTouch.position;
+			} else if (myTouch.phase == TouchPhase.Ended) {
+				isMoved = false;
+				isHorizontalMoved = false;
+				isVerticalMoved = false;
+			}
+
+			fromTouchBegan += Time.deltaTime;
+		}
 #endif
 	}
 
