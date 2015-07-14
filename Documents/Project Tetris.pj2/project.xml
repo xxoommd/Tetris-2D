@@ -55,7 +55,7 @@
 			<key>kDMProject_Settings_DayTimeSpan</key>
 			<dict>
 				<key>class</key>
-				<string>NSMutableDictionary</string>
+				<string>NSDictionary</string>
 				<key>object</key>
 				<dict>
 					<key>begin</key>
@@ -63,14 +63,14 @@
 						<key>class</key>
 						<string>NSNumber</string>
 						<key>object</key>
-						<integer>480</integer>
+						<integer>570</integer>
 					</dict>
 					<key>end</key>
 					<dict>
 						<key>class</key>
 						<string>NSNumber</string>
 						<key>object</key>
-						<integer>1200</integer>
+						<integer>1110</integer>
 					</dict>
 				</dict>
 			</dict>
@@ -261,6 +261,50 @@
 				<key>object</key>
 				<true/>
 			</dict>
+			<key>kDMProject_TimelineViewCustomTimeSpan</key>
+			<dict>
+				<key>class</key>
+				<string>NSDictionary</string>
+				<key>object</key>
+				<dict>
+					<key>begin</key>
+					<dict>
+						<key>class</key>
+						<string>DMDate</string>
+						<key>object</key>
+						<dict>
+							<key>day</key>
+							<integer>15</integer>
+							<key>dayOfWeek</key>
+							<integer>1</integer>
+							<key>month</key>
+							<integer>6</integer>
+							<key>secondOfDay</key>
+							<integer>0</integer>
+							<key>year</key>
+							<integer>2015</integer>
+						</dict>
+					</dict>
+					<key>end</key>
+					<dict>
+						<key>class</key>
+						<string>DMDate</string>
+						<key>object</key>
+						<dict>
+							<key>day</key>
+							<integer>22</integer>
+							<key>dayOfWeek</key>
+							<integer>2</integer>
+							<key>month</key>
+							<integer>9</integer>
+							<key>secondOfDay</key>
+							<integer>0</integer>
+							<key>year</key>
+							<integer>2015</integer>
+						</dict>
+					</dict>
+				</dict>
+			</dict>
 			<key>kDMProject_TimelineViewMode</key>
 			<dict>
 				<key>class</key>
@@ -306,11 +350,11 @@
 						<key>object</key>
 						<dict>
 							<key>day</key>
-							<integer>26</integer>
+							<integer>22</integer>
 							<key>dayOfWeek</key>
-							<integer>0</integer>
+							<integer>2</integer>
 							<key>month</key>
-							<integer>7</integer>
+							<integer>9</integer>
 							<key>secondOfDay</key>
 							<integer>0</integer>
 							<key>year</key>
@@ -324,7 +368,7 @@
 				<key>class</key>
 				<string>NSNumber</string>
 				<key>object</key>
-				<integer>2</integer>
+				<integer>0</integer>
 			</dict>
 		</dict>
 	</dict>
@@ -346,11 +390,11 @@
 	<key>endDate</key>
 	<dict>
 		<key>day</key>
-		<integer>19</integer>
+		<integer>15</integer>
 		<key>dayOfWeek</key>
-		<integer>0</integer>
+		<integer>2</integer>
 		<key>month</key>
-		<integer>7</integer>
+		<integer>9</integer>
 		<key>secondOfDay</key>
 		<integer>0</integer>
 		<key>year</key>
@@ -983,7 +1027,7 @@
 			<key>kind</key>
 			<integer>0</integer>
 			<key>name</key>
-			<string>xxoommd</string>
+			<string>fei</string>
 			<key>objectID</key>
 			<integer>4294967297</integer>
 			<key>subitems</key>
@@ -1096,23 +1140,22 @@
 			<data>
 			YnBsaXN0MDDUAQIDBAUGFhdYJHZlcnNpb25YJG9iamVjdHNZJGFy
 			Y2hpdmVyVCR0b3ASAAGGoKMHCA9VJG51bGzTCQoLDA0OVU5TUkdC
-			XE5TQ29sb3JTcGFjZVYkY2xhc3NPECswLjAwMDkzOTAzODUyMzkg
-			MC45OTU3NTYyMDg5IDAuMDcyMzYzMzkxNTIAEAGAAtIQERITWiRj
-			bGFzc25hbWVYJGNsYXNzZXNXTlNDb2xvcqIUFVdOU0NvbG9yWE5T
-			T2JqZWN0XxAPTlNLZXllZEFyY2hpdmVy0RgZVHJvb3SAAQgRGiMt
-			Mjc7QUhOW2KQkpSZpK21uMDJ297jAAAAAAAAAQEAAAAAAAAAGgAA
-			AAAAAAAAAAAAAAAAAOU=
+			XE5TQ29sb3JTcGFjZVYkY2xhc3NPEBwwIDAuOTk1NzU2MjA4OSAw
+			LjUwNTgyMTU1MzIAEAGAAtIQERITWiRjbGFzc25hbWVYJGNsYXNz
+			ZXNXTlNDb2xvcqIUFVdOU0NvbG9yWE5TT2JqZWN0XxAPTlNLZXll
+			ZEFyY2hpdmVy0RgZVHJvb3SAAQgRGiMtMjc7QUhOW2KBg4WKlZ6m
+			qbG6zM/UAAAAAAAAAQEAAAAAAAAAGgAAAAAAAAAAAAAAAAAAANY=
 			</data>
 			<key>fillColorDict</key>
 			<dict>
 				<key>a</key>
 				<real>1</real>
 				<key>b</key>
-				<real>0.072363391518592834</real>
+				<real>0.50582152605056763</real>
 				<key>g</key>
 				<real>0.99575620889663696</real>
 				<key>r</key>
-				<real>0.00093903852393850684</real>
+				<real>0.0</real>
 			</dict>
 			<key>identifier</key>
 			<string></string>
@@ -1607,22 +1650,22 @@
 			<data>
 			YnBsaXN0MDDUAQIDBAUGFhdYJHZlcnNpb25YJG9iamVjdHNZJGFy
 			Y2hpdmVyVCR0b3ASAAGGoKMHCA9VJG51bGzTCQoLDA0OVU5TUkdC
-			XE5TQ29sb3JTcGFjZVYkY2xhc3NPEBExIDAuODY2NjY2Njc0NiAw
-			ABABgALSEBESE1okY2xhc3NuYW1lWCRjbGFzc2VzV05TQ29sb3Ki
-			FBVXTlNDb2xvclhOU09iamVjdF8QD05TS2V5ZWRBcmNoaXZlctEY
-			GVRyb290gAEIERojLTI3O0FITltidnh6f4qTm56mr8HEyQAAAAAA
-			AAEBAAAAAAAAABoAAAAAAAAAAAAAAAAAAADL
+			XE5TQ29sb3JTcGFjZVYkY2xhc3NPEB0wLjA4ODMxOTc2ODQ1IDEg
+			MC4yNTMzOTM5MzE1ABABgALSEBESE1okY2xhc3NuYW1lWCRjbGFz
+			c2VzV05TQ29sb3KiFBVXTlNDb2xvclhOU09iamVjdF8QD05TS2V5
+			ZWRBcmNoaXZlctEYGVRyb290gAEIERojLTI3O0FITltigoSGi5af
+			p6qyu83Q1QAAAAAAAAEBAAAAAAAAABoAAAAAAAAAAAAAAAAAAADX
 			</data>
 			<key>fillColorDict</key>
 			<dict>
 				<key>a</key>
 				<real>1</real>
 				<key>b</key>
-				<real>0.0</real>
+				<real>0.25339391827583313</real>
 				<key>g</key>
-				<real>0.86666667461395264</real>
-				<key>r</key>
 				<real>1</real>
+				<key>r</key>
+				<real>0.088319770991802216</real>
 			</dict>
 			<key>identifier</key>
 			<string></string>
@@ -1735,22 +1778,22 @@
 			<data>
 			YnBsaXN0MDDUAQIDBAUGFhdYJHZlcnNpb25YJG9iamVjdHNZJGFy
 			Y2hpdmVyVCR0b3ASAAGGoKMHCA9VJG51bGzTCQoLDA0OVU5TUkdC
-			XE5TQ29sb3JTcGFjZVYkY2xhc3NPEBExIDAuODY2NjY2Njc0NiAw
-			ABABgALSEBESE1okY2xhc3NuYW1lWCRjbGFzc2VzV05TQ29sb3Ki
-			FBVXTlNDb2xvclhOU09iamVjdF8QD05TS2V5ZWRBcmNoaXZlctEY
-			GVRyb290gAEIERojLTI3O0FITltidnh6f4qTm56mr8HEyQAAAAAA
-			AAEBAAAAAAAAABoAAAAAAAAAAAAAAAAAAADL
+			XE5TQ29sb3JTcGFjZVYkY2xhc3NPEA8wIDEgMC4yMzY5MTk1OQAQ
+			AYAC0hAREhNaJGNsYXNzbmFtZVgkY2xhc3Nlc1dOU0NvbG9yohQV
+			V05TQ29sb3JYTlNPYmplY3RfEA9OU0tleWVkQXJjaGl2ZXLRGBlU
+			cm9vdIABCBEaIy0yNztBSE5bYnR2eH2IkZmcpK2/wscAAAAAAAAB
+			AQAAAAAAAAAaAAAAAAAAAAAAAAAAAAAAyQ==
 			</data>
 			<key>fillColorDict</key>
 			<dict>
 				<key>a</key>
 				<real>1</real>
 				<key>b</key>
-				<real>0.0</real>
+				<real>0.2369195967912674</real>
 				<key>g</key>
-				<real>0.86666667461395264</real>
-				<key>r</key>
 				<real>1</real>
+				<key>r</key>
+				<real>0.0</real>
 			</dict>
 			<key>identifier</key>
 			<string></string>
@@ -1858,12 +1901,12 @@
 				<integer>4294967297</integer>
 			</array>
 			<key>duration</key>
-			<integer>25200</integer>
+			<integer>18660</integer>
 			<key>fillColor</key>
 			<data>
 			YnBsaXN0MDDUAQIDBAUGFhdYJHZlcnNpb25YJG9iamVjdHNZJGFy
 			Y2hpdmVyVCR0b3ASAAGGoKMHCA9VJG51bGzTCQoLDA0OVU5TUkdC
-			XE5TQ29sb3JTcGFjZVYkY2xhc3NPEBExIDAuODY2NjY2Njc0NiAw
+			XE5TQ29sb3JTcGFjZVYkY2xhc3NPEBEwIDEgMC4xNDU3NjYxMjA5
 			ABABgALSEBESE1okY2xhc3NuYW1lWCRjbGFzc2VzV05TQ29sb3Ki
 			FBVXTlNDb2xvclhOU09iamVjdF8QD05TS2V5ZWRBcmNoaXZlctEY
 			GVRyb290gAEIERojLTI3O0FITltidnh6f4qTm56mr8HEyQAAAAAA
@@ -1874,11 +1917,11 @@
 				<key>a</key>
 				<real>1</real>
 				<key>b</key>
-				<real>0.0</real>
+				<real>0.14576612412929535</real>
 				<key>g</key>
-				<real>0.86666667461395264</real>
-				<key>r</key>
 				<real>1</real>
+				<key>r</key>
+				<real>0.0</real>
 			</dict>
 			<key>identifier</key>
 			<string></string>
@@ -1891,7 +1934,7 @@
 			<key>outboundDependencies</key>
 			<array/>
 			<key>progress</key>
-			<real>0.0</real>
+			<real>1</real>
 			<key>subitems</key>
 			<array/>
 			<key>tag</key>
