@@ -27,6 +27,8 @@ public class UIController : MonoBehaviour
 			GameObject newUI = Instantiate (uiObj) as GameObject;
 			newUI.name = name;
 			uiStack.Add (newUI);
+		} else {
+			Debug.Log ("--- UI prefab not found: " + name + " ---");
 		}
 	}
 
