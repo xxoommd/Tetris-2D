@@ -6,7 +6,7 @@ public class UIController : MonoBehaviour
 {
 
 	public static UIController instance;
-	List<GameObject> uiStack;
+	List<GameObject> uiList;
 
 	void Awake ()
 	{
@@ -17,16 +17,16 @@ public class UIController : MonoBehaviour
 		}
 
 		DontDestroyOnLoad (gameObject);
-		uiStack = new List<GameObject> ();
+		uiList = new List<GameObject> ();
 	}
 
 	public void Show (string name)
 	{
-		Object uiObj = Resources.Load (name);
+		Object uiObj = Resources.Load ("UI/" + name);
 		if (uiObj) {
 			GameObject newUI = Instantiate (uiObj) as GameObject;
 			newUI.name = name;
-			uiStack.Add (newUI);
+			uiList.Add (newUI);
 		} else {
 			Debug.Log ("--- UI prefab not found: " + name + " ---");
 		}
@@ -34,9 +34,9 @@ public class UIController : MonoBehaviour
 
 	public void Close (string name)
 	{
-		foreach (GameObject ui in uiStack) {
+		foreach (GameObject ui in uiList) {
 			if (ui.name == name) {
-				uiStack.Remove (ui);
+				uiList.Remove (ui);
 				Destroy (ui.gameObject);
 				return;
 			}
@@ -45,11 +45,11 @@ public class UIController : MonoBehaviour
 
 	public void CloseTop ()
 	{
-		if (uiStack.Count > 0) {
-			GameObject last = uiStack[uiStack.Count - 1];
+		if (uiList.Count > 0) {
+			GameObject last = uiList [uiList.Count - 1];
 
 			if (last) {
-				uiStack.Remove (last);
+				uiList.Remove (last);
 				Destroy (last.gameObject);
 			}
 		}

@@ -1,7 +1,8 @@
 ﻿using UnityEngine;
 using System.Collections;
 
-public class Tetris_Z : Tetris {
+public class Tetris_Z : Tetris
+{
 
 	protected override void InitialAllCoordinates ()
 	{

@@ -1,12 +1,12 @@
 ﻿using UnityEngine;
 using System.Collections;
 
-public class MainMenuEvent : MonoBehaviour {
+public class MainMenuEvent : MonoBehaviour
+{
 
-	public void OnClickPlay () {
-		Destroy (gameObject);
-
-		// Start Playing...
+	public void OnClickPlay ()
+	{
+		UIController.instance.Close ("Main UI");
 		GameController.instance.NewGame ();
 	}
 }

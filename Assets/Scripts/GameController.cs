@@ -12,52 +12,34 @@ public class PlayGround
 
 public class GameController : MonoBehaviour
 {
-	// Tetris templates
-	public GameObject[] brickTemplates;
-	[HideInInspector]
-	public GameObject
-		brickI;
-	[HideInInspector]
-	public GameObject
-		brickJ;
-	[HideInInspector]
-	public GameObject
-		brickL;
-	[HideInInspector]
-	public GameObject
-		brickS;
-	[HideInInspector]
-	public GameObject
-		brickZ;
-	[HideInInspector]
-	public GameObject
-		brickO;
-	[HideInInspector]
-	public GameObject
-		brickT;
 
-
-	//
-	public GameObject wallTemplate;
+	// Singleton instance
 	public static GameController instance = null;
+
+	// Tetris templates
+	[HideInInspector] public GameObject brickI;
+	[HideInInspector] public GameObject brickJ;
+	[HideInInspector] public GameObject brickL;
+	[HideInInspector] public GameObject brickS;
+	[HideInInspector] public GameObject brickZ;
+	[HideInInspector] public GameObject brickO;
+	[HideInInspector] public GameObject brickT;
+
+	// Public attributes which should not show in unity inspector
+	[HideInInspector] public Board board;
+	[HideInInspector] public bool isCleaning = false;
+	[HideInInspector] public bool isPaused = false;
+	[HideInInspector] public bool isGameOver = true;
+
+	// Public attributes which will be specified in unity editor
+	public GameObject wallTemplate;
 	public GameObject[] tetrisTemplates;
-	[HideInInspector]
-	public bool isCleaning = false;
-	[HideInInspector]
-	public Board
-		board;
 	public GameObject boardObject;
 	public float fallingUnitTime = 0.1f;
 	public PlayGround playground;
-
-	[HideInInspector]
-	public bool
-		isPaused = false;
-
-	//
+	
+	// Private attributes
 	private GameObject currentTetris = null;
-	[HideInInspector]
-	public bool isGameOver = true;
 
 	void Awake ()
 	{
@@ -66,7 +48,14 @@ public class GameController : MonoBehaviour
 		} else if (instance != this) {
 			Destroy (gameObject);
 		}
+
 		DontDestroyOnLoad (gameObject);
+
+		Object[] temp = Resources.LoadAll ("Bricks");
+		GameObject[] brickTemplates = new GameObject[temp.Length];
+		for (int i = 0; i < temp.Length; i++) {
+			brickTemplates [i] = temp [i] as GameObject;
+		}
 
 		brickI = brickTemplates [0];
 		brickJ = brickTemplates [1];
@@ -122,7 +111,8 @@ public class GameController : MonoBehaviour
 		NewGame ();
 	}
 
-	public void PauseGame () {
+	public void PauseGame ()
+	{
 		UIController.instance.Show ("Pause UI");
 		isPaused = true;
 	}

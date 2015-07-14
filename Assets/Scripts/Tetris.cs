@@ -97,18 +97,18 @@ public abstract class Tetris : MonoBehaviour
 
 		//   'Fire1' or 'Arrow Up' -> Turn
 		int revisedX = 0;
-		if (Input.GetKeyUp (KeyCode.UpArrow) || Input.GetKeyUp(KeyCode.W)) {
+		if (Input.GetKeyUp (KeyCode.UpArrow) || Input.GetKeyUp (KeyCode.W)) {
 			if (CanTurn (ref revisedX)) {
 				StartCoroutine (Turn (revisedX));
 			}
 		}
 
 		//   'Arrow Left' or 'Right' -> Horizontal movement by one unit
-		if (Input.GetKey(KeyCode.LeftArrow)) {
+		if (Input.GetKey (KeyCode.LeftArrow)) {
 			leftPressedEnabled = true;
 		}
 
-		if (Input.GetKey(KeyCode.RightArrow)) {
+		if (Input.GetKey (KeyCode.RightArrow)) {
 			rightPressedEnabled = true;
 		}
 
@@ -127,15 +127,15 @@ public abstract class Tetris : MonoBehaviour
 				moveDelay = 0.01f;
 			}
 
-			StartCoroutine(HorizontalMove(h, moveDelay));
+			StartCoroutine (HorizontalMove (h, moveDelay));
 		}
 
-		if (Input.GetKeyUp(KeyCode.LeftArrow)) {
+		if (Input.GetKeyUp (KeyCode.LeftArrow)) {
 			leftPressedTime = 0f;
 			leftPressedEnabled = false;
 		}
 
-		if (Input.GetKeyUp(KeyCode.RightArrow)) {
+		if (Input.GetKeyUp (KeyCode.RightArrow)) {
 			rightPressedTime = 0f;
 			rightPressedEnabled = false;
 		}
@@ -147,8 +147,8 @@ public abstract class Tetris : MonoBehaviour
 		}
 
 		//   'Space' -> Fall down immediately
-		if (Input.GetKeyUp(KeyCode.Space)) {
-			FallDownToBottom();
+		if (Input.GetKeyUp (KeyCode.Space)) {
+			FallDownToBottom ();
 		}
 
 #elif UNITY_IOS
@@ -387,7 +387,7 @@ public abstract class Tetris : MonoBehaviour
 
 			int x = (int)brick.transform.position.x;
 			int y = (int)brick.transform.position.y;
-			board.brickMatrix[x, y] = true;
+			board.brickMatrix [x, y] = true;
 
 			if (board.maxHeight < y) {
 				board.maxHeight = y;

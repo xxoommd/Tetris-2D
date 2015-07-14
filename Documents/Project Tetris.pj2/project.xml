@@ -55,7 +55,7 @@
 			<key>kDMProject_Settings_DayTimeSpan</key>
 			<dict>
 				<key>class</key>
-				<string>NSDictionary</string>
+				<string>NSMutableDictionary</string>
 				<key>object</key>
 				<dict>
 					<key>begin</key>
@@ -261,50 +261,6 @@
 				<key>object</key>
 				<true/>
 			</dict>
-			<key>kDMProject_TimelineViewCustomTimeSpan</key>
-			<dict>
-				<key>class</key>
-				<string>NSDictionary</string>
-				<key>object</key>
-				<dict>
-					<key>begin</key>
-					<dict>
-						<key>class</key>
-						<string>DMDate</string>
-						<key>object</key>
-						<dict>
-							<key>day</key>
-							<integer>15</integer>
-							<key>dayOfWeek</key>
-							<integer>1</integer>
-							<key>month</key>
-							<integer>6</integer>
-							<key>secondOfDay</key>
-							<integer>0</integer>
-							<key>year</key>
-							<integer>2015</integer>
-						</dict>
-					</dict>
-					<key>end</key>
-					<dict>
-						<key>class</key>
-						<string>DMDate</string>
-						<key>object</key>
-						<dict>
-							<key>day</key>
-							<integer>22</integer>
-							<key>dayOfWeek</key>
-							<integer>2</integer>
-							<key>month</key>
-							<integer>9</integer>
-							<key>secondOfDay</key>
-							<integer>0</integer>
-							<key>year</key>
-							<integer>2015</integer>
-						</dict>
-					</dict>
-				</dict>
-			</dict>
 			<key>kDMProject_TimelineViewMode</key>
 			<dict>
 				<key>class</key>
@@ -317,7 +273,7 @@
 				<key>class</key>
 				<string>NSNumber</string>
 				<key>object</key>
-				<real>51.408383809682817</real>
+				<real>1</real>
 			</dict>
 			<key>kDMProject_TimelineViewTimeSpan</key>
 			<dict>
@@ -332,9 +288,9 @@
 						<key>object</key>
 						<dict>
 							<key>day</key>
-							<integer>15</integer>
+							<integer>23</integer>
 							<key>dayOfWeek</key>
-							<integer>1</integer>
+							<integer>2</integer>
 							<key>month</key>
 							<integer>6</integer>
 							<key>secondOfDay</key>
@@ -1118,13 +1074,13 @@
 			<key>beginDate</key>
 			<dict>
 				<key>day</key>
-				<integer>15</integer>
+				<integer>23</integer>
 				<key>dayOfWeek</key>
-				<integer>1</integer>
+				<integer>2</integer>
 				<key>month</key>
 				<integer>6</integer>
 				<key>secondOfDay</key>
-				<integer>0</integer>
+				<integer>34200</integer>
 				<key>year</key>
 				<integer>2015</integer>
 			</dict>
@@ -1135,13 +1091,13 @@
 				<integer>4294967297</integer>
 			</array>
 			<key>duration</key>
-			<integer>640800</integer>
+			<integer>349200</integer>
 			<key>fillColor</key>
 			<data>
 			YnBsaXN0MDDUAQIDBAUGFhdYJHZlcnNpb25YJG9iamVjdHNZJGFy
 			Y2hpdmVyVCR0b3ASAAGGoKMHCA9VJG51bGzTCQoLDA0OVU5TUkdC
 			XE5TQ29sb3JTcGFjZVYkY2xhc3NPEBwwIDAuOTk1NzU2MjA4OSAw
-			LjUwNTgyMTU1MzIAEAGAAtIQERITWiRjbGFzc25hbWVYJGNsYXNz
+			LjUwNTgyMTUyNjEAEAGAAtIQERITWiRjbGFzc25hbWVYJGNsYXNz
 			ZXNXTlNDb2xvcqIUFVdOU0NvbG9yWE5TT2JqZWN0XxAPTlNLZXll
 			ZEFyY2hpdmVy0RgZVHJvb3SAAQgRGiMtMjc7QUhOW2KBg4WKlZ6m
 			qbG6zM/UAAAAAAAAAQEAAAAAAAAAGgAAAAAAAAAAAAAAAAAAANY=
@@ -1650,8 +1606,8 @@
 			<data>
 			YnBsaXN0MDDUAQIDBAUGFhdYJHZlcnNpb25YJG9iamVjdHNZJGFy
 			Y2hpdmVyVCR0b3ASAAGGoKMHCA9VJG51bGzTCQoLDA0OVU5TUkdC
-			XE5TQ29sb3JTcGFjZVYkY2xhc3NPEB0wLjA4ODMxOTc2ODQ1IDEg
-			MC4yNTMzOTM5MzE1ABABgALSEBESE1okY2xhc3NuYW1lWCRjbGFz
+			XE5TQ29sb3JTcGFjZVYkY2xhc3NPEB0wLjA4ODMxOTc3MDk5IDEg
+			MC4yNTMzOTM5MTgzABABgALSEBESE1okY2xhc3NuYW1lWCRjbGFz
 			c2VzV05TQ29sb3KiFBVXTlNDb2xvclhOU09iamVjdF8QD05TS2V5
 			ZWRBcmNoaXZlctEYGVRyb290gAEIERojLTI3O0FITltigoSGi5af
 			p6qyu83Q1QAAAAAAAAEBAAAAAAAAABoAAAAAAAAAAAAAAAAAAADX
@@ -1778,11 +1734,11 @@
 			<data>
 			YnBsaXN0MDDUAQIDBAUGFhdYJHZlcnNpb25YJG9iamVjdHNZJGFy
 			Y2hpdmVyVCR0b3ASAAGGoKMHCA9VJG51bGzTCQoLDA0OVU5TUkdC
-			XE5TQ29sb3JTcGFjZVYkY2xhc3NPEA8wIDEgMC4yMzY5MTk1OQAQ
-			AYAC0hAREhNaJGNsYXNzbmFtZVgkY2xhc3Nlc1dOU0NvbG9yohQV
-			V05TQ29sb3JYTlNPYmplY3RfEA9OU0tleWVkQXJjaGl2ZXLRGBlU
-			cm9vdIABCBEaIy0yNztBSE5bYnR2eH2IkZmcpK2/wscAAAAAAAAB
-			AQAAAAAAAAAaAAAAAAAAAAAAAAAAAAAAyQ==
+			XE5TQ29sb3JTcGFjZVYkY2xhc3NPEBEwIDEgMC4yMzY5MTk1OTY4
+			ABABgALSEBESE1okY2xhc3NuYW1lWCRjbGFzc2VzV05TQ29sb3Ki
+			FBVXTlNDb2xvclhOU09iamVjdF8QD05TS2V5ZWRBcmNoaXZlctEY
+			GVRyb290gAEIERojLTI3O0FITltidnh6f4qTm56mr8HEyQAAAAAA
+			AAEBAAAAAAAAABoAAAAAAAAAAAAAAAAAAADL
 			</data>
 			<key>fillColorDict</key>
 			<dict>
@@ -1906,7 +1862,7 @@
 			<data>
 			YnBsaXN0MDDUAQIDBAUGFhdYJHZlcnNpb25YJG9iamVjdHNZJGFy
 			Y2hpdmVyVCR0b3ASAAGGoKMHCA9VJG51bGzTCQoLDA0OVU5TUkdC
-			XE5TQ29sb3JTcGFjZVYkY2xhc3NPEBEwIDEgMC4xNDU3NjYxMjA5
+			XE5TQ29sb3JTcGFjZVYkY2xhc3NPEBEwIDEgMC4xNDU3NjYxMjQx
 			ABABgALSEBESE1okY2xhc3NuYW1lWCRjbGFzc2VzV05TQ29sb3Ki
 			FBVXTlNDb2xvclhOU09iamVjdF8QD05TS2V5ZWRBcmNoaXZlctEY
 			GVRyb290gAEIERojLTI3O0FITltidnh6f4qTm56mr8HEyQAAAAAA
