@@ -2,10 +2,9 @@
 using System.Collections;
 using System.Collections.Generic;
 
-public class UIController : MonoBehaviour
+public class UIController : Singleton <UIController>
 {
 
-	public static UIController instance;
 	List<GameObject> uiList;
 	public GameObject currentUI {
 		get {
@@ -17,15 +16,9 @@ public class UIController : MonoBehaviour
 		}
 	}
 
-	void Awake ()
+	protected override void Awake ()
 	{
-		if (instance == null) {
-			instance = this;
-		} else if (instance != this) {
-			Destroy (gameObject);
-		}
-
-		DontDestroyOnLoad (gameObject);
+		base.Awake ();
 		uiList = new List<GameObject> ();
 	}
 

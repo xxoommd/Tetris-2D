@@ -10,11 +10,8 @@ public class PlayGround
 	public int height;
 }
 
-public class GameController : MonoBehaviour
+public class GameController : Singleton <GameController>
 {
-
-	// Singleton instance
-	public static GameController instance = null;
 
 	// Tetris templates
 	[HideInInspector] public GameObject brickI;
@@ -42,15 +39,10 @@ public class GameController : MonoBehaviour
 	// Private attributes
 	private GameObject currentTetris = null;
 
-	void Awake ()
+	// Inherited methods:
+	protected override void Awake ()
 	{
-		if (instance == null) {
-			instance = this;
-		} else if (instance != this) {
-			Destroy (gameObject);
-		}
-
-		DontDestroyOnLoad (gameObject);
+		base.Awake ();
 
 		Object[] temp = Resources.LoadAll ("Bricks");
 		GameObject[] brickTemplates = new GameObject[temp.Length];
@@ -70,9 +62,7 @@ public class GameController : MonoBehaviour
 	void Start ()
 	{
 		// Adjust main camera.
-
 		Camera camera = Camera.main;
-		Debug.Log ("aspect: " + camera.aspect);
 		camera.transform.position = new Vector3 (playground.width / 2 - 0.5f, playground.height / 2 - 0.5f, camera.transform.position.z);
 		camera.orthographicSize = playground.height / 2 + 2f;
 
@@ -82,60 +72,8 @@ public class GameController : MonoBehaviour
 			camera.orthographicSize = newSize;
 		}
 
+		// First run: Show main menu
 		UIController.instance.Show ("Main UI");
-	}
-
-	public void NewGame ()
-	{
-		GameObject boardObj = Instantiate (boardObject) as GameObject;
-		board = boardObj.GetComponent<Board> ();
-
-		InitWalls ();
-
-		UIController.instance.CloseTop ();
-		UIController.instance.Show ("In Game UI");
-
-		isGameOver = false;
-		isPaused = false;
-		score = 0;
-
-		Text scoreText = InGameUI.instance.scoreText;
-		scoreText.text = "Score: " + score.ToString ();
-	}
-
-	public void QuitGame ()
-	{
-		isGameOver = true;
-
-		GameObject wall = GameObject.Find ("Walls");
-		Destroy (wall);
-		Destroy (board.gameObject);
-
-		if (currentTetris) {
-			Destroy (currentTetris);
-		}
-
-		UIController.instance.Close ("In Game UI");
-	}
-
-	public void RestartGame ()
-	{
-		QuitGame ();
-		NewGame ();
-	}
-
-	public void PauseGame ()
-	{
-		UIController.instance.Show ("Pause UI");
-		isPaused = true;
-	}
-
-	public void AddScore (int scoreInc) {
-		score += scoreInc;
-		Debug.Log ("--- current score: " + score.ToString ());
-
-		Text scoreText = InGameUI.instance.scoreText;
-		scoreText.text = "Score: " + score.ToString ();
 	}
 
 	void Update ()
@@ -154,6 +92,7 @@ public class GameController : MonoBehaviour
 		}
 	}
 
+	// Private methods:
 	void InitWalls ()
 	{
 		GameObject wall = new GameObject ("Walls");
@@ -173,10 +112,66 @@ public class GameController : MonoBehaviour
 		}
 	}
 
+	void UpdateScore () {
+		GameObject uiObj = UIController.instance.FindUI ("In Game UI");
+		if (uiObj != null) {
+			uiObj.GetComponent<InGameUI>().scoreText.text = "Score: " + score.ToString();
+		}
+	}
+
+	// Public methods:
+	public void NewGame ()
+	{
+		GameObject boardObj = Instantiate (boardObject) as GameObject;
+		board = boardObj.GetComponent<Board> ();
+		
+		InitWalls ();
+		
+		UIController.instance.CloseTop ();
+		UIController.instance.Show ("In Game UI");
+		
+		isGameOver = false;
+		isPaused = false;
+		score = 0;
+		UpdateScore ();
+	}
+	
+	public void QuitGame ()
+	{
+		isGameOver = true;
+		
+		GameObject wall = GameObject.Find ("Walls");
+		Destroy (wall);
+		Destroy (board.gameObject);
+		
+		if (currentTetris) {
+			Destroy (currentTetris);
+		}
+		
+		UIController.instance.Close ("In Game UI");
+	}
+	
+	public void RestartGame ()
+	{
+		QuitGame ();
+		NewGame ();
+	}
+	
+	public void PauseGame ()
+	{
+		UIController.instance.Show ("Pause UI");
+		isPaused = true;
+	}
+	
 	public void GameOver ()
 	{
 		isGameOver = true;
 		UIController.instance.Show ("GameOver UI");
+	}
+	
+	public void AddScore (int scoreInc) {
+		score += scoreInc;
+		UpdateScore ();
 	}
 }
 
