@@ -30,6 +30,7 @@ public class GameController : MonoBehaviour
 	[HideInInspector] public bool isCleaning = false;
 	[HideInInspector] public bool isPaused = false;
 	[HideInInspector] public bool isGameOver = true;
+	[HideInInspector] public int score = 0;
 
 	// Public attributes which will be specified in unity editor
 	public GameObject wallTemplate;
@@ -96,6 +97,10 @@ public class GameController : MonoBehaviour
 
 		isGameOver = false;
 		isPaused = false;
+		score = 0;
+
+		Text scoreText = InGameUI.instance.scoreText;
+		scoreText.text = "Score: " + score.ToString ();
 	}
 
 	public void QuitGame ()
@@ -123,6 +128,14 @@ public class GameController : MonoBehaviour
 	{
 		UIController.instance.Show ("Pause UI");
 		isPaused = true;
+	}
+
+	public void AddScore (int scoreInc) {
+		score += scoreInc;
+		Debug.Log ("--- current score: " + score.ToString ());
+
+		Text scoreText = InGameUI.instance.scoreText;
+		scoreText.text = "Score: " + score.ToString ();
 	}
 
 	void Update ()

@@ -7,6 +7,15 @@ public class UIController : MonoBehaviour
 
 	public static UIController instance;
 	List<GameObject> uiList;
+	public GameObject currentUI {
+		get {
+			if (uiList.Count > 0) {
+				return uiList[uiList.Count - 1];
+			} else {
+				return null;
+			}
+		}
+	}
 
 	void Awake ()
 	{
@@ -18,6 +27,16 @@ public class UIController : MonoBehaviour
 
 		DontDestroyOnLoad (gameObject);
 		uiList = new List<GameObject> ();
+	}
+
+	public GameObject FindUI (string name) {
+		foreach (GameObject ui in uiList) {
+			if (ui.name == name) {
+				return ui;
+			}
+		}
+
+		return null;
 	}
 
 	public void Show (string name)

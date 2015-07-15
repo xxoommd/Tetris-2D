@@ -98,6 +98,7 @@ public class Board : MonoBehaviour
 
 		if (pendingLines.Count > 0) {
 			ClearLines (ref pendingLines);
+			GameController.instance.AddScore (pendingLines.Count);
 		}
 
 		UpdateMatrix ();
