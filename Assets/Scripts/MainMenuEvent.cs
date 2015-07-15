@@ -7,9 +7,8 @@ public class MainMenuEvent : MonoBehaviour
 	public Image background;
 
 	void Awake () {
-		if (Screen.height > 1024) {
-			background.flexibleWidth = Screen.height;
-			background.flexibleHeight = Screen.height;
+		if (Screen.height > background.rectTransform.sizeDelta.x) {
+			background.rectTransform.sizeDelta = new Vector2 (Screen.height, Screen.height);
 		}
 	}
 
