@@ -261,50 +261,6 @@
 				<key>object</key>
 				<true/>
 			</dict>
-			<key>kDMProject_TimelineViewCustomTimeSpan</key>
-			<dict>
-				<key>class</key>
-				<string>NSDictionary</string>
-				<key>object</key>
-				<dict>
-					<key>begin</key>
-					<dict>
-						<key>class</key>
-						<string>DMDate</string>
-						<key>object</key>
-						<dict>
-							<key>day</key>
-							<integer>23</integer>
-							<key>dayOfWeek</key>
-							<integer>2</integer>
-							<key>month</key>
-							<integer>6</integer>
-							<key>secondOfDay</key>
-							<integer>0</integer>
-							<key>year</key>
-							<integer>2015</integer>
-						</dict>
-					</dict>
-					<key>end</key>
-					<dict>
-						<key>class</key>
-						<string>DMDate</string>
-						<key>object</key>
-						<dict>
-							<key>day</key>
-							<integer>27</integer>
-							<key>dayOfWeek</key>
-							<integer>2</integer>
-							<key>month</key>
-							<integer>10</integer>
-							<key>secondOfDay</key>
-							<integer>0</integer>
-							<key>year</key>
-							<integer>2015</integer>
-						</dict>
-					</dict>
-				</dict>
-			</dict>
 			<key>kDMProject_TimelineViewMode</key>
 			<dict>
 				<key>class</key>
@@ -350,11 +306,11 @@
 						<key>object</key>
 						<dict>
 							<key>day</key>
-							<integer>27</integer>
+							<integer>22</integer>
 							<key>dayOfWeek</key>
 							<integer>2</integer>
 							<key>month</key>
-							<integer>10</integer>
+							<integer>9</integer>
 							<key>secondOfDay</key>
 							<integer>0</integer>
 							<key>year</key>
@@ -403,7 +359,7 @@
 	<key>events</key>
 	<array/>
 	<key>lastObjectID</key>
-	<integer>4294967319</integer>
+	<integer>4294967321</integer>
 	<key>resources</key>
 	<array>
 		<dict>
@@ -1382,12 +1338,12 @@
 			<key>class</key>
 			<string>DMProjectProcess</string>
 			<key>duration</key>
-			<integer>1672200</integer>
+			<integer>1674000</integer>
 			<key>fillColor</key>
 			<data>
 			YnBsaXN0MDDUAQIDBAUGFhdYJHZlcnNpb25YJG9iamVjdHNZJGFy
 			Y2hpdmVyVCR0b3ASAAGGoKMHCA9VJG51bGzTCQoLDA0OVU5TUkdC
-			XE5TQ29sb3JTcGFjZVYkY2xhc3NPEBExIDAgMC42NTE1NjQzMTQ4
+			XE5TQ29sb3JTcGFjZVYkY2xhc3NPEBExIDAgMC42NTE1NjQzMDAx
 			ABABgALSEBESE1okY2xhc3NuYW1lWCRjbGFzc2VzV05TQ29sb3Ki
 			FBVXTlNDb2xvclhOU09iamVjdF8QD05TS2V5ZWRBcmNoaXZlctEY
 			GVRyb290gAEIERojLTI3O0FITltidnh6f4qTm56mr8HEyQAAAAAA
@@ -1415,7 +1371,7 @@
 			<key>outboundDependencies</key>
 			<array/>
 			<key>progress</key>
-			<real>0.8571428656578064</real>
+			<real>0.8928571343421936</real>
 			<key>subitems</key>
 			<array>
 				<dict>
@@ -2298,14 +2254,14 @@
 					<key>class</key>
 					<string>DMProjectProcess</string>
 					<key>duration</key>
-					<integer>111600</integer>
+					<integer>889200</integer>
 					<key>fillColor</key>
 					<data>
 					YnBsaXN0MDDUAQIDBAUGFhdYJHZlcnNpb25Y
 					JG9iamVjdHNZJGFyY2hpdmVyVCR0b3ASAAGG
 					oKMHCA9VJG51bGzTCQoLDA0OVU5TUkdCXE5T
 					Q29sb3JTcGFjZVYkY2xhc3NPEBIwIDEgMC4w
-					NjY2MDc2NTI0NwAQAYAC0hAREhNaJGNsYXNz
+					NjY2MDc2NTQwOQAQAYAC0hAREhNaJGNsYXNz
 					bmFtZVgkY2xhc3Nlc1dOU0NvbG9yohQVV05T
 					Q29sb3JYTlNPYmplY3RfEA9OU0tleWVkQXJj
 					aGl2ZXLRGBlUcm9vdIABCBEaIy0yNztBSE5b
@@ -2336,7 +2292,7 @@
 					<key>parentItemObjectID</key>
 					<integer>4294967315</integer>
 					<key>progress</key>
-					<real>0.0</real>
+					<real>0.25</real>
 					<key>subitems</key>
 					<array>
 						<dict>
@@ -2470,7 +2426,7 @@
 							<key>parentItemObjectID</key>
 							<integer>4294967312</integer>
 							<key>progress</key>
-							<real>0.0</real>
+							<real>1</real>
 							<key>subitems</key>
 							<array/>
 							<key>tag</key>
@@ -2617,7 +2573,299 @@
 							<key>tag</key>
 							<integer>0</integer>
 							<key>title</key>
-							<string>Level Controller</string>
+							<string>World Controller 1</string>
+							<key>useWorkingSchedule</key>
+							<true/>
+						</dict>
+						<dict>
+							<key>attributes</key>
+							<dict>
+								<key>class</key>
+								<string>NSMutableDictionary</string>
+								<key>object</key>
+								<dict>
+									<key>kDMProjectItem_EnforceWorkingDatesOnDrag</key>
+									<dict>
+										<key>class</key>
+										<string>NSNumber</string>
+										<key>object</key>
+										<true/>
+									</dict>
+									<key>kDMProjectItem_ExpandToFitSubitems</key>
+									<dict>
+										<key>class</key>
+										<string>NSNumber</string>
+										<key>object</key>
+										<true/>
+									</dict>
+									<key>kDMProjectItem_GanttView_DisplayFloat</key>
+									<dict>
+										<key>class</key>
+										<string>NSNumber</string>
+										<key>object</key>
+										<true/>
+									</dict>
+									<key>kDMProjectItem_GanttView_NodeIsExpanded</key>
+									<dict>
+										<key>class</key>
+										<string>NSNumber</string>
+										<key>object</key>
+										<true/>
+									</dict>
+									<key>kDMProjectItem_GanttView_Row</key>
+									<dict>
+										<key>class</key>
+										<string>NSNumber</string>
+										<key>object</key>
+										<integer>-1</integer>
+									</dict>
+									<key>kDMProjectItem_GanttView_Visible</key>
+									<dict>
+										<key>class</key>
+										<string>NSNumber</string>
+										<key>object</key>
+										<true/>
+									</dict>
+									<key>kDMProjectItem_Notes</key>
+									<dict>
+										<key>class</key>
+										<string>NSMutableString</string>
+										<key>object</key>
+										<string>This is Traditional Tetris World.
+Stage 1: Only I tetris, should finish clean 10 times in 2 mins. And save brother L and J.
+Stage 2: I, L, J tetris, should finish clean 15 times in 2 mins and save brother S and Z.
+Stage 3: I, L, J, S, Z tetris, should finish clean 20 times in 2 mins. Save brother T.
+Stage 4: I, L, J, S, Z, T tetris, should finish clean 20 times in 2 mins. Save brother O.
+Stage 5: All tetris, should finish clean 25 times in 3 mins.</string>
+									</dict>
+									<key>kDMProjectItem_PushesSubitems</key>
+									<dict>
+										<key>class</key>
+										<string>NSNumber</string>
+										<key>object</key>
+										<false/>
+									</dict>
+									<key>kDMProjectItem_ResourceView_Visible</key>
+									<dict>
+										<key>class</key>
+										<string>NSNumber</string>
+										<key>object</key>
+										<true/>
+									</dict>
+								</dict>
+							</dict>
+							<key>beginDate</key>
+							<dict>
+								<key>day</key>
+								<integer>16</integer>
+								<key>dayOfWeek</key>
+								<integer>4</integer>
+								<key>month</key>
+								<integer>7</integer>
+								<key>secondOfDay</key>
+								<integer>0</integer>
+								<key>year</key>
+								<integer>2015</integer>
+							</dict>
+							<key>class</key>
+							<string>DMProjectTask</string>
+							<key>concernedResources</key>
+							<array>
+								<integer>4294967297</integer>
+							</array>
+							<key>duration</key>
+							<integer>32400</integer>
+							<key>fillColor</key>
+							<data>
+							YnBsaXN0MDDUAQIDBAUG
+							FhdYJHZlcnNpb25YJG9i
+							amVjdHNZJGFyY2hpdmVy
+							VCR0b3ASAAGGoKMHCA9V
+							JG51bGzTCQoLDA0OVU5T
+							UkdCXE5TQ29sb3JTcGFj
+							ZVYkY2xhc3NPEBExIDAu
+							ODY2NjY2Njc0NiAwABAB
+							gALSEBESE1okY2xhc3Nu
+							YW1lWCRjbGFzc2VzV05T
+							Q29sb3KiFBVXTlNDb2xv
+							clhOU09iamVjdF8QD05T
+							S2V5ZWRBcmNoaXZlctEY
+							GVRyb290gAEIERojLTI3
+							O0FITltidnh6f4qTm56m
+							r8HEyQAAAAAAAAEBAAAA
+							AAAAABoAAAAAAAAAAAAA
+							AAAAAADL
+							</data>
+							<key>fillColorDict</key>
+							<dict>
+								<key>a</key>
+								<real>1</real>
+								<key>b</key>
+								<real>0.0</real>
+								<key>g</key>
+								<real>0.86666667461395264</real>
+								<key>r</key>
+								<real>1</real>
+							</dict>
+							<key>identifier</key>
+							<string></string>
+							<key>kind</key>
+							<integer>1415672683</integer>
+							<key>locked</key>
+							<false/>
+							<key>objectID</key>
+							<integer>4294967320</integer>
+							<key>outboundDependencies</key>
+							<array/>
+							<key>parentItemObjectID</key>
+							<integer>4294967312</integer>
+							<key>progress</key>
+							<real>0.0</real>
+							<key>subitems</key>
+							<array/>
+							<key>tag</key>
+							<integer>0</integer>
+							<key>title</key>
+							<string>World 0 (Test)</string>
+							<key>useWorkingSchedule</key>
+							<true/>
+						</dict>
+						<dict>
+							<key>attributes</key>
+							<dict>
+								<key>class</key>
+								<string>NSMutableDictionary</string>
+								<key>object</key>
+								<dict>
+									<key>kDMProjectItem_EnforceWorkingDatesOnDrag</key>
+									<dict>
+										<key>class</key>
+										<string>NSNumber</string>
+										<key>object</key>
+										<true/>
+									</dict>
+									<key>kDMProjectItem_ExpandToFitSubitems</key>
+									<dict>
+										<key>class</key>
+										<string>NSNumber</string>
+										<key>object</key>
+										<true/>
+									</dict>
+									<key>kDMProjectItem_GanttView_DisplayFloat</key>
+									<dict>
+										<key>class</key>
+										<string>NSNumber</string>
+										<key>object</key>
+										<true/>
+									</dict>
+									<key>kDMProjectItem_GanttView_NodeIsExpanded</key>
+									<dict>
+										<key>class</key>
+										<string>NSNumber</string>
+										<key>object</key>
+										<true/>
+									</dict>
+									<key>kDMProjectItem_GanttView_Row</key>
+									<dict>
+										<key>class</key>
+										<string>NSNumber</string>
+										<key>object</key>
+										<integer>-1</integer>
+									</dict>
+									<key>kDMProjectItem_GanttView_Visible</key>
+									<dict>
+										<key>class</key>
+										<string>NSNumber</string>
+										<key>object</key>
+										<true/>
+									</dict>
+									<key>kDMProjectItem_PushesSubitems</key>
+									<dict>
+										<key>class</key>
+										<string>NSNumber</string>
+										<key>object</key>
+										<false/>
+									</dict>
+									<key>kDMProjectItem_ResourceView_Visible</key>
+									<dict>
+										<key>class</key>
+										<string>NSNumber</string>
+										<key>object</key>
+										<true/>
+									</dict>
+								</dict>
+							</dict>
+							<key>beginDate</key>
+							<dict>
+								<key>day</key>
+								<integer>17</integer>
+								<key>dayOfWeek</key>
+								<integer>5</integer>
+								<key>month</key>
+								<integer>7</integer>
+								<key>secondOfDay</key>
+								<integer>0</integer>
+								<key>year</key>
+								<integer>2015</integer>
+							</dict>
+							<key>class</key>
+							<string>DMProjectTask</string>
+							<key>concernedResources</key>
+							<array/>
+							<key>duration</key>
+							<integer>291600</integer>
+							<key>fillColor</key>
+							<data>
+							YnBsaXN0MDDUAQIDBAUG
+							FhdYJHZlcnNpb25YJG9i
+							amVjdHNZJGFyY2hpdmVy
+							VCR0b3ASAAGGoKMHCA9V
+							JG51bGzTCQoLDA0OVU5T
+							UkdCXE5TQ29sb3JTcGFj
+							ZVYkY2xhc3NPEBExIDAu
+							ODY2NjY2Njc0NiAwABAB
+							gALSEBESE1okY2xhc3Nu
+							YW1lWCRjbGFzc2VzV05T
+							Q29sb3KiFBVXTlNDb2xv
+							clhOU09iamVjdF8QD05T
+							S2V5ZWRBcmNoaXZlctEY
+							GVRyb290gAEIERojLTI3
+							O0FITltidnh6f4qTm56m
+							r8HEyQAAAAAAAAEBAAAA
+							AAAAABoAAAAAAAAAAAAA
+							AAAAAADL
+							</data>
+							<key>fillColorDict</key>
+							<dict>
+								<key>a</key>
+								<real>1</real>
+								<key>b</key>
+								<real>0.0</real>
+								<key>g</key>
+								<real>0.86666667461395264</real>
+								<key>r</key>
+								<real>1</real>
+							</dict>
+							<key>identifier</key>
+							<string></string>
+							<key>kind</key>
+							<integer>1415672683</integer>
+							<key>locked</key>
+							<false/>
+							<key>objectID</key>
+							<integer>4294967321</integer>
+							<key>outboundDependencies</key>
+							<array/>
+							<key>parentItemObjectID</key>
+							<integer>4294967312</integer>
+							<key>progress</key>
+							<real>0.0</real>
+							<key>subitems</key>
+							<array/>
+							<key>tag</key>
+							<integer>0</integer>
+							<key>title</key>
+							<string>World 1</string>
 							<key>useWorkingSchedule</key>
 							<true/>
 						</dict>
@@ -2856,7 +3104,7 @@
 			<data>
 			YnBsaXN0MDDUAQIDBAUGFhdYJHZlcnNpb25YJG9iamVjdHNZJGFy
 			Y2hpdmVyVCR0b3ASAAGGoKMHCA9VJG51bGzTCQoLDA0OVU5TUkdC
-			XE5TQ29sb3JTcGFjZVYkY2xhc3NPEBExIDAgMC45NTM4NTgzNDg3
+			XE5TQ29sb3JTcGFjZVYkY2xhc3NPEBExIDAgMC45NTM4NTgzNzU1
 			ABABgALSEBESE1okY2xhc3NuYW1lWCRjbGFzc2VzV05TQ29sb3Ki
 			FBVXTlNDb2xvclhOU09iamVjdF8QD05TS2V5ZWRBcmNoaXZlctEY
 			GVRyb290gAEIERojLTI3O0FITltidnh6f4qTm56mr8HEyQAAAAAA
