@@ -2811,7 +2811,9 @@ Stage 5: All tetris, should finish clean 25 times in 3 mins.</string>
 							<key>class</key>
 							<string>DMProjectTask</string>
 							<key>concernedResources</key>
-							<array/>
+							<array>
+								<integer>4294967297</integer>
+							</array>
 							<key>duration</key>
 							<integer>291600</integer>
 							<key>fillColor</key>
