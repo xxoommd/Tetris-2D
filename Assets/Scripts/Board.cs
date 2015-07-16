@@ -8,22 +8,16 @@ public class Board : MonoBehaviour
 	public bool[,] brickMatrix;
 	GameController gameController;
 	[HideInInspector]public int maxHeight = 0;
-	public GameObject garbageTemplate;
-	[HideInInspector]public GameObject garbage;
+
+	private GameScene gameScene;
 
 	void Start ()
 	{
 		gameController = GameController.instance;
-		garbage = Instantiate (garbageTemplate) as GameObject;
-
 		brickMatrix = new bool[gameController.playground.width, gameController.playground.height];
 		InitBrickMatrix ();
-	}
 
-	void OnDestroy () {
-		if (garbage) {
-			Destroy (garbage);
-		}
+		gameScene = gameController.gameScene;
 	}
 
 	void InitBrickMatrix () {
@@ -64,7 +58,7 @@ public class Board : MonoBehaviour
 
 			if (clearBricks.Count > 0) {
 				foreach(Transform b in clearBricks) {
-					b.SetParent (garbage.transform);
+					b.SetParent (gameScene.garbage.transform);
 					Destroy (b.gameObject);
 				}
 			}
@@ -98,11 +92,11 @@ public class Board : MonoBehaviour
 
 		if (pendingLines.Count > 0) {
 			ClearLines (ref pendingLines);
-			GameController.instance.AddScore (pendingLines.Count);
+			GameController.instance.AddScore ((uint)pendingLines.Count);
 		}
 
 		UpdateMatrix ();
-		gameController.isCleaning = false;
+		gameScene.isCleaning = false;
 	}
 
 	public void CheckClear ()

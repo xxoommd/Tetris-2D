@@ -1,14 +1,14 @@
 ﻿using UnityEngine;
 using System.Collections;
 
-public class GameOverMenuEvents : MonoBehaviour
+public class GameOverUI : MonoBehaviour
 {
 
 	public void OnClickMain ()
 	{
 		GameController.instance.QuitGame ();
 		Destroy (gameObject);
-		UIController.instance.Show ("Main UI");
+		Instantiate (Resources.Load ("UI/Main UI") as GameObject);
 	}
 
 	public void OnClickRestart ()

@@ -1371,7 +1371,7 @@
 			<key>outboundDependencies</key>
 			<array/>
 			<key>progress</key>
-			<real>0.8928571343421936</real>
+			<real>0.9465709924697876</real>
 			<key>subitems</key>
 			<array>
 				<dict>
@@ -2292,7 +2292,7 @@
 					<key>parentItemObjectID</key>
 					<integer>4294967315</integer>
 					<key>progress</key>
-					<real>0.25</real>
+					<real>0.62599700689315796</real>
 					<key>subitems</key>
 					<array>
 						<dict>
@@ -2567,7 +2567,7 @@
 							<key>parentItemObjectID</key>
 							<integer>4294967312</integer>
 							<key>progress</key>
-							<real>0.0</real>
+							<real>0.50398802757263184</real>
 							<key>subitems</key>
 							<array/>
 							<key>tag</key>
@@ -2720,7 +2720,7 @@ Stage 5: All tetris, should finish clean 25 times in 3 mins.</string>
 							<key>parentItemObjectID</key>
 							<integer>4294967312</integer>
 							<key>progress</key>
-							<real>0.0</real>
+							<real>1</real>
 							<key>subitems</key>
 							<array/>
 							<key>tag</key>

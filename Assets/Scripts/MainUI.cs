@@ -2,7 +2,7 @@
 using UnityEngine.UI;
 using System.Collections;
 
-public class MainMenuEvent : MonoBehaviour
+public class MainUI : MonoBehaviour
 {
 	public Image background;
 
@@ -14,7 +14,8 @@ public class MainMenuEvent : MonoBehaviour
 
 	public void OnClickPlay ()
 	{
-		UIController.instance.Close ("Main UI");
 		GameController.instance.NewGame ();
+
+		Destroy (gameObject);
 	}
 }

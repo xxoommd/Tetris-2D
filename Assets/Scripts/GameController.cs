@@ -2,12 +2,31 @@
 using System.Collections;
 using Random = UnityEngine.Random;
 using UnityEngine.UI;
+using System.Collections.Generic;
 
 [System.Serializable]
 public class PlayGround
 {
 	public int width;
 	public int height;
+}
+
+public class TetrisData
+{
+	public byte weight;
+	public GameObject template;
+
+	public TetrisData (byte wt, GameObject go) {
+		weight = wt;
+		template = go;
+	}
+}
+
+public class PlayerData 
+{
+	public ushort world;
+	public ushort level;
+	public uint score;
 }
 
 public class GameController : Singleton <GameController>
@@ -23,27 +42,28 @@ public class GameController : Singleton <GameController>
 	[HideInInspector] public GameObject brickT;
 
 	// Public attributes which should not show in unity inspector
-	[HideInInspector] public Board board;
-	[HideInInspector] public bool isCleaning = false;
-	[HideInInspector] public bool isPaused = false;
+	[HideInInspector] public bool isGamePause = false;
 	[HideInInspector] public bool isGameOver = true;
-	[HideInInspector] public int score = 0;
+	[HideInInspector] public GameScene gameScene;
+	[HideInInspector] public PlayerData playerData;
+	[HideInInspector] public bool scoreDirty = false;
+
 
 	// Public attributes which will be specified in unity editor
-	public GameObject wallTemplate;
-	public GameObject[] tetrisTemplates;
-	public GameObject boardObject;
 	public float fallingUnitTime = 0.1f;
 	public PlayGround playground;
 	
 	// Private attributes
-	private GameObject currentTetris = null;
+	private GameObject gameSceneTemplate;
+
+		
 
 	// Inherited methods:
 	protected override void Awake ()
 	{
 		base.Awake ();
 
+		// Init bricks.
 		Object[] temp = Resources.LoadAll ("Bricks");
 		GameObject[] brickTemplates = new GameObject[temp.Length];
 		for (int i = 0; i < temp.Length; i++) {
@@ -57,6 +77,8 @@ public class GameController : Singleton <GameController>
 		brickZ = brickTemplates [4];
 		brickO = brickTemplates [5];
 		brickT = brickTemplates [6];
+
+		gameSceneTemplate = Resources.Load ("Game Scene") as GameObject;
 	}
 
 	void Start ()
@@ -73,7 +95,11 @@ public class GameController : Singleton <GameController>
 		}
 
 		// First run: Show main menu
-		UIController.instance.Show ("Main UI");
+		ShowUI ("Main UI");
+
+		playerData = new PlayerData ();
+		playerData.world = 0;
+		playerData.level = 0;
 	}
 
 	void Update ()
@@ -84,71 +110,43 @@ public class GameController : Singleton <GameController>
 
 		if (Input.GetKeyUp (KeyCode.P)) {
 			PauseGame ();
-		}
-
-		if (currentTetris == null && !isCleaning) {
-			currentTetris = Instantiate (tetrisTemplates [Random.Range (0, tetrisTemplates.Length)]) as GameObject;
-			currentTetris.transform.position = new Vector3 (playground.width / 2, playground.height - 2, 0);
+			return;
 		}
 	}
 
 	// Private methods:
-	void InitWalls ()
-	{
-		GameObject wall = new GameObject ("Walls");
 
-		for (int x = 0; x < playground.width; x++) {
-			GameObject wall1 = Instantiate (wallTemplate, new Vector3 (x, -1, 0), Quaternion.identity) as GameObject;
-			GameObject wall2 = Instantiate (wallTemplate, new Vector3 (x, playground.height, 0), Quaternion.identity) as GameObject;
-			wall1.transform.SetParent (wall.transform);
-			wall2.transform.SetParent (wall.transform);
-		}
-		
-		for (int y = -1; y < playground.height + 1; y++) {
-			GameObject wall1 = Instantiate (wallTemplate, new Vector3 (-1, y, 0), Quaternion.identity) as GameObject;
-			GameObject wall2 = Instantiate (wallTemplate, new Vector3 (playground.width, y, 0), Quaternion.identity) as GameObject;
-			wall1.transform.SetParent (wall.transform);
-			wall2.transform.SetParent (wall.transform);
-		}
-	}
-
-	void UpdateScore () {
-		GameObject uiObj = UIController.instance.FindUI ("In Game UI");
-		if (uiObj != null) {
-			uiObj.GetComponent<InGameUI>().scoreText.text = "Score: " + score.ToString();
-		}
-	}
 
 	// Public methods:
+	public void ShowUI (string name, GameObject parent = null) {
+		GameObject uiObject = Instantiate (Resources.Load ("UI/" + name) as GameObject);
+
+		if (parent != null) {
+			uiObject.transform.SetParent (parent.transform);
+		}
+	}
+
 	public void NewGame ()
 	{
-		GameObject boardObj = Instantiate (boardObject) as GameObject;
-		board = boardObj.GetComponent<Board> ();
-		
-		InitWalls ();
-		
-		UIController.instance.CloseTop ();
-		UIController.instance.Show ("In Game UI");
-		
 		isGameOver = false;
-		isPaused = false;
-		score = 0;
-		UpdateScore ();
+		isGamePause = false;
+
+		playerData.score = 0;
+		scoreDirty = true;
+
+		gameScene = (Instantiate (gameSceneTemplate) as GameObject).GetComponent<GameScene> ();
+		LevelData currentLevelData = WorldController.instance.FindLevelData (playerData.world, playerData.level);
+		gameScene.SetData (currentLevelData);
 	}
 	
 	public void QuitGame ()
 	{
 		isGameOver = true;
-		
-		GameObject wall = GameObject.Find ("Walls");
-		Destroy (wall);
-		Destroy (board.gameObject);
-		
-		if (currentTetris) {
-			Destroy (currentTetris);
+
+		if (gameScene) {
+			Destroy (gameScene.gameObject);
+			gameScene = null;
 		}
-		
-		UIController.instance.Close ("In Game UI");
 	}
 	
 	public void RestartGame ()
@@ -159,19 +157,23 @@ public class GameController : Singleton <GameController>
 	
 	public void PauseGame ()
 	{
-		UIController.instance.Show ("Pause UI");
-		isPaused = true;
+		ShowUI ("Pause UI", gameScene.gameObject);
+		isGamePause = true;
 	}
 	
 	public void GameOver ()
 	{
+		isGamePause = true;
 		isGameOver = true;
-		UIController.instance.Show ("GameOver UI");
+		ShowUI ("GameOver UI", gameScene.gameObject);
+		if (gameScene.inGameUI) {
+			gameScene.inGameUI.GameOver ();
+		}
 	}
-	
-	public void AddScore (int scoreInc) {
-		score += scoreInc;
-		UpdateScore ();
+
+	public void AddScore (uint scoreInc) {
+		playerData.score += scoreInc;
+		scoreDirty = true;
 	}
 }
 

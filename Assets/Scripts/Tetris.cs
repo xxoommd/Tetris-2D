@@ -18,7 +18,7 @@ public abstract class Tetris : MonoBehaviour
 	private bool autoFallDisabled = false;
 	private bool movingDown = false;
 	private bool reachBottom = false;
-	private Board board;
+	private GameScene gameScene;
 
 	// Keyboard: Long press makes move faster
 #if UNITY_EDITOR || UNITY_STANDALONE || UNITY_WEBPLAYER || UNITY_WEBGL
@@ -54,6 +54,8 @@ public abstract class Tetris : MonoBehaviour
 			obj.transform.localPosition = coordinates [directionIndex, i];
 			bricks [i] = obj;
 		}
+
+		gameScene = GameController.instance.gameScene;
 	}
 
 	protected virtual void Start ()
@@ -63,7 +65,7 @@ public abstract class Tetris : MonoBehaviour
 			GameController.instance.GameOver ();
 		}
 
-		board = GameController.instance.board;
+//		board = GameController.instance.board;
 		StartCoroutine (AutoFall ());
 	}
 
@@ -92,7 +94,7 @@ public abstract class Tetris : MonoBehaviour
 			return;
 		}
 
-		if (GameController.instance.isPaused) {
+		if (GameController.instance.isGamePause) {
 			return;
 		}
 
@@ -246,7 +248,7 @@ public abstract class Tetris : MonoBehaviour
 			int x = (int)brick.transform.position.x;
 			int y = (int)brick.transform.position.y;
 
-			if (GameController.instance.board.brickMatrix [x, y]) {
+			if (gameScene.board.brickMatrix [x, y]) {
 				return false;
 			}
 		}
@@ -304,7 +306,7 @@ public abstract class Tetris : MonoBehaviour
 						int x = (int)brick.transform.position.x;
 						int y = (int)brick.transform.position.y;
 						
-						if (x < 0 || x >= GameController.instance.playground.width || board.brickMatrix [x, y]) {
+						if (x < 0 || x >= GameController.instance.playground.width || gameScene.board.brickMatrix [x, y]) {
 							isOK = false;
 							break;
 						}
@@ -353,7 +355,7 @@ public abstract class Tetris : MonoBehaviour
 				foreach (GameObject brick in bricks) {
 					int nextX = (int)brick.transform.position.x + h;
 					int nextY = (int)brick.transform.position.y;
-					if (nextX < 0 || nextX >= GameController.instance.playground.width || board.brickMatrix [nextX, nextY]) {
+					if (nextX < 0 || nextX >= GameController.instance.playground.width || gameScene.board.brickMatrix [nextX, nextY]) {
 						return false;
 					}
 				}
@@ -376,7 +378,7 @@ public abstract class Tetris : MonoBehaviour
 			foreach (GameObject brick in bricks) {
 				int nextX = (int)brick.transform.position.x;
 				int nextY = (int)brick.transform.position.y + v;
-				if (nextY < 0 || nextY >= GameController.instance.playground.height || board.brickMatrix [nextX, nextY]) {
+				if (nextY < 0 || nextY >= GameController.instance.playground.height || gameScene.board.brickMatrix [nextX, nextY]) {
 					reachBottom = true;
 					return false;
 				}
@@ -401,7 +403,7 @@ public abstract class Tetris : MonoBehaviour
 				break;
 			}
 
-			if (GameController.instance.isPaused) {
+			if (GameController.instance.isGamePause) {
 				yield return new WaitForSeconds (0.1f);
 				continue;
 			}
@@ -466,19 +468,19 @@ public abstract class Tetris : MonoBehaviour
 	void TransferToBricksAndDestroy ()
 	{
 		foreach (GameObject brick in bricks) {
-			brick.transform.SetParent (board.transform);
+			brick.transform.SetParent (gameScene.board.transform);
 
 			int x = (int)brick.transform.position.x;
 			int y = (int)brick.transform.position.y;
-			board.brickMatrix [x, y] = true;
+			gameScene.board.brickMatrix [x, y] = true;
 
-			if (board.maxHeight < y) {
-				board.maxHeight = y;
+			if (gameScene.board.maxHeight < y) {
+				gameScene.board.maxHeight = y;
 			}
 		}
 
-		GameController.instance.isCleaning = true;
-		board.CheckClear ();
+		gameScene.isCleaning = true;
+		gameScene.board.CheckClear ();
 
 		Destroy (gameObject);
 
