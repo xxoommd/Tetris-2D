@@ -1338,7 +1338,7 @@
 			<key>class</key>
 			<string>DMProjectProcess</string>
 			<key>duration</key>
-			<integer>1674000</integer>
+			<integer>1587600</integer>
 			<key>fillColor</key>
 			<data>
 			YnBsaXN0MDDUAQIDBAUGFhdYJHZlcnNpb25YJG9iamVjdHNZJGFy
@@ -2254,7 +2254,7 @@
 					<key>class</key>
 					<string>DMProjectProcess</string>
 					<key>duration</key>
-					<integer>889200</integer>
+					<integer>802800</integer>
 					<key>fillColor</key>
 					<data>
 					YnBsaXN0MDDUAQIDBAUGFhdYJHZlcnNpb25Y
@@ -2798,9 +2798,9 @@ Stage 5: All tetris, should finish clean 25 times in 3 mins.</string>
 							<key>beginDate</key>
 							<dict>
 								<key>day</key>
-								<integer>17</integer>
+								<integer>20</integer>
 								<key>dayOfWeek</key>
-								<integer>5</integer>
+								<integer>1</integer>
 								<key>month</key>
 								<integer>7</integer>
 								<key>secondOfDay</key>
@@ -2815,7 +2815,7 @@ Stage 5: All tetris, should finish clean 25 times in 3 mins.</string>
 								<integer>4294967297</integer>
 							</array>
 							<key>duration</key>
-							<integer>291600</integer>
+							<integer>162000</integer>
 							<key>fillColor</key>
 							<data>
 							YnBsaXN0MDDUAQIDBAUG
@@ -2947,9 +2947,9 @@ Stage 5: All tetris, should finish clean 25 times in 3 mins.</string>
 					<key>beginDate</key>
 					<dict>
 						<key>day</key>
-						<integer>25</integer>
+						<integer>24</integer>
 						<key>dayOfWeek</key>
-						<integer>6</integer>
+						<integer>5</integer>
 						<key>month</key>
 						<integer>7</integer>
 						<key>secondOfDay</key>
