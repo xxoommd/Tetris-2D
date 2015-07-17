@@ -18,6 +18,9 @@ public class InGameUI : MonoBehaviour
 	public void OnClickPause ()
 	{
 		GameController.instance.PauseGame ();
+	}
+
+	public void GamePause () {
 		pauseButton.interactable = false;
 	}
 

@@ -20,7 +20,7 @@ public class LevelData
 }
 
 [System.Serializable]
-public struct WorldData
+public class WorldData
 {
 	public LevelData[] levels;
 }
@@ -29,7 +29,13 @@ public class WorldController : Singleton <WorldController>
 {
 	public WorldData[] worlds;
 
-	public LevelData FindLevelData(ushort worldID, ushort level) {
-		return worlds [worldID].levels [level];
+	public WorldData FindWorldData (ushort world)
+	{
+		return worlds [world];
+	}
+
+	public LevelData FindLevelData (ushort world, ushort level)
+	{
+		return worlds [world].levels [level];
 	}
 }

@@ -115,7 +115,28 @@ public class GameController : Singleton <GameController>
 	}
 
 	// Private methods:
+	void CreateGameScene () {
+		if (gameScene == null) {
+			gameScene = (Instantiate (gameSceneTemplate) as GameObject).GetComponent<GameScene> ();
+			WorldData currentWorldData = WorldController.instance.FindWorldData (playerData.world);
+			if (currentWorldData != null) {
+				if (currentWorldData.levels.Length <= playerData.level) {
+					playerData.world ++;
+					playerData.level = 0;
 
+					if (playerData.world >= WorldController.instance.worlds.Length) {
+						Debug.Log ("--- NO AVAILABLE WORLD OF ID: " + playerData.world.ToString() + " ---");
+						return;
+					}
+				}
+
+				LevelData currentLevelData = WorldController.instance.FindLevelData (playerData.world, playerData.level);
+				gameScene.SetData (currentLevelData);
+			} else {
+				Debug.Log ("--- NO AVAILABLE WORLD OF ID: " + playerData.world.ToString() + " ---");
+			}
+		}
+	}
 
 	// Public methods:
 	public void ShowUI (string name, GameObject parent = null) {
@@ -134,9 +155,7 @@ public class GameController : Singleton <GameController>
 		playerData.score = 0;
 		scoreDirty = true;
 
-		gameScene = (Instantiate (gameSceneTemplate) as GameObject).GetComponent<GameScene> ();
-		LevelData currentLevelData = WorldController.instance.FindLevelData (playerData.world, playerData.level);
-		gameScene.SetData (currentLevelData);
+		CreateGameScene ();
 	}
 	
 	public void QuitGame ()
@@ -165,16 +184,35 @@ public class GameController : Singleton <GameController>
 	{
 		isGamePause = true;
 		isGameOver = true;
-		ShowUI ("GameOver UI", gameScene.gameObject);
+
 		if (gameScene.inGameUI) {
 			gameScene.inGameUI.GameOver ();
 		}
+	}
+	
+	public void GameWin () {
+		GameOver ();
+
+		ShowUI ("Game Win UI", gameScene.gameObject);
+	}
+
+	public void GameLose () {
+		GameOver ();
+
+		ShowUI ("Game Lose UI", gameScene.gameObject);
+	}
+
+	public void GoToNextLevel () {
+		QuitGame ();
+		playerData.level++;
+		NewGame ();
 	}
 
 	public void AddScore (uint scoreInc) {
 		playerData.score += scoreInc;
 		scoreDirty = true;
 	}
+
 }
 
 

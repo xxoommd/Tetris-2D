@@ -25,10 +25,13 @@ public class GameScene : MonoBehaviour {
 		board = transform.FindChild ("Board").gameObject.GetComponent<Board> ();
 		garbage = transform.FindChild ("Garbage").gameObject;
 		inGameUI = transform.FindChild ("In Game UI").gameObject.GetComponent<InGameUI> ();
+
+		UpdateTime ();
 	}
 
 	void Update () {
 		if (!setDataFinished || GameController.instance.isGamePause || GameController.instance.isGameOver) {
+			Debug.Log(string.Format("--- Update returned: setDataFinished: {0}, Pause: {1}, GameOver: {2} ---", setDataFinished, GameController.instance.isGamePause, GameController.instance.isGameOver));
 			return;
 		}
 
@@ -43,8 +46,14 @@ public class GameScene : MonoBehaviour {
 			UpdateScore ();
 		}
 
-		if (CheckGameOver ()) {
-			GameController.instance.GameOver ();
+		if (CheckGameWin ()) {
+			GameController.instance.GameWin ();
+			return;
+		}
+
+		if (CheckGameLose ()) {
+			GameController.instance.GameLose ();
+			return;
 		}
 
 		PlayGround playground = GameController.instance.playground;
@@ -100,6 +109,8 @@ public class GameScene : MonoBehaviour {
 			TetrisData data = new TetrisData (weight, go);
 			tetrisDictionary.Add (name, data);
 		}
+
+		setDataFinished = true;
 	}
 
 	GameObject RandomTetrisTemplate () {
@@ -122,14 +133,17 @@ public class GameScene : MonoBehaviour {
 				return data.template;
 			}
 		}
-		
+
+		Debug.Log ("--- Random Tetris error ---");
 		return null;
 	}
 
-	bool CheckGameOver () {
-		if (GameController.instance.playerData.score >= levelData.aimClearings) {
-			return true;
-		} else if (timeLeft <= float.Epsilon /* 0 */) {
+	bool CheckGameWin () {
+		return GameController.instance.playerData.score >= levelData.aimClearings;
+	}
+
+	bool CheckGameLose () {
+		if (GameController.instance.playerData.score < levelData.aimClearings && timeLeft <= float.Epsilon /* 0 */) {
 			return true;
 		} else {
 			return false;
